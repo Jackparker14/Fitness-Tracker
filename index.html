@@ -15,42 +15,49 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"></noscript>
 <style>
 :root{
+  --mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+  --head:'Oswald','Arial Narrow',sans-serif;
+  --body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+
   --bg:#1c2321; --panel:#232b28; --panel-2:#2b3430; --line:#3a423d;
   --bone:#ede8de; --muted:#8b9490; --gold:#c9a227; --moss:#4c7a6b;
   --slate-blue:#7a8fa6; --danger:#b3552f; --good:#5fae82; --low:#d99a3d;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
-body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;padding:28px 16px 60px;}
+body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:100vh;padding:28px 16px 60px;}
 .wrap{max-width:820px;margin:0 auto;}
 .masthead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px;}
-.masthead h1{font-family:'Oswald','Arial Narrow',sans-serif;font-weight:700;font-size:30px;letter-spacing:0.5px;margin:0;text-transform:uppercase;}
-.masthead .sub{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);letter-spacing:0.5px;}
-.masthead .date{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;color:var(--muted);text-align:right;}
+.masthead h1{font-family:var(--head);font-weight:700;font-size:30px;letter-spacing:0.5px;margin:0;text-transform:uppercase;}
+.masthead .sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.5px;}
+.masthead .date{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;}
 .tabs{display:flex;margin-bottom:20px;border:1px solid var(--line);border-radius:2px;overflow:hidden;}
-.tab{flex:1;text-align:center;padding:11px 0;font-family:'Oswald','Arial Narrow',sans-serif;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--muted);background:var(--panel);}
+.backup-banner{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--panel-2);border:1px solid var(--gold);border-left:3px solid var(--gold);border-radius:2px;padding:10px 14px;margin-bottom:18px;font-family:var(--mono);font-size:12px;color:var(--bone);cursor:pointer;}
+.backup-banner .banner-link{color:var(--gold);font-weight:700;white-space:nowrap;}
+.backup-banner button{background:var(--gold);color:#1c2321;border:none;font-family:var(--head);font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:8px 14px;border-radius:2px;cursor:pointer;white-space:nowrap;}
+.backup-banner button:hover{background:#dbb536;}.tab{flex:1;text-align:center;padding:11px 0;font-family:var(--head);font-size:14px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--muted);background:var(--panel);}
 .tab.active{background:var(--gold);color:#1c2321;font-weight:600;}
 .page{display:none;} .page.active{display:block;}
 .compass-panel{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:20px;margin-bottom:16px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;}
 .compass-panel svg{flex-shrink:0;}
 .compass-legend{flex:1;min-width:200px;display:flex;flex-direction:column;gap:10px;}
-.leg-row{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:13px;}
+.leg-row{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:13px;}
 .leg-label{display:flex;align-items:center;gap:8px;color:var(--bone);}
 .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
 .leg-val{color:var(--muted);} .leg-val b{color:var(--bone);font-weight:600;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:16px;}
-.card h3{font-family:'Oswald','Arial Narrow',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px 0;color:var(--muted);}
+.card h3{font-family:var(--head);font-size:13px;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px 0;color:var(--muted);}
 .pr-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);}
 .pr-row:last-child{border-bottom:none;}
 .pr-row label{font-size:13px;color:var(--bone);}
-.pr-row input{width:80px;background:var(--panel-2);border:1px solid var(--line);color:var(--gold);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-weight:700;font-size:14px;text-align:right;padding:4px 6px;border-radius:2px;}
+.pr-row input{width:80px;background:var(--panel-2);border:1px solid var(--line);color:var(--gold);font-family:var(--mono);font-weight:700;font-size:14px;text-align:right;padding:4px 6px;border-radius:2px;}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:18px;margin-bottom:16px;}
-.panel h3{font-family:'Oswald','Arial Narrow',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin:0 0 14px 0;color:var(--bone);}
-.panel h3 .hint{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;text-transform:none;letter-spacing:0;font-size:11px;color:var(--muted);font-weight:400;}
+.panel h3{font-family:var(--head);font-size:14px;text-transform:uppercase;letter-spacing:1px;margin:0 0 14px 0;color:var(--bone);}
+.panel h3 .hint{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:11px;color:var(--muted);font-weight:400;}
 .form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
-.form-row select,.form-row input{background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;padding:9px 10px;border-radius:2px;}
+.form-row select,.form-row input{background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:var(--body);font-size:14px;padding:9px 10px;border-radius:2px;}
 .form-row select{flex:1;min-width:110px;}
 .form-row input[type=number]{width:90px;}
 .form-row input[type=date]{width:150px;}
@@ -59,7 +66,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 .sets-and-key{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px;}
 .sets-block{flex:1;min-width:0;}
 .sets-block .set-grid{margin-bottom:0;}
-.rpe-key{flex-shrink:0;background:var(--panel-2);border:1px solid var(--line);border-radius:2px;padding:8px 10px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;color:var(--muted);line-height:1.4;}
+.rpe-key{flex-shrink:0;background:var(--panel-2);border:1px solid var(--line);border-radius:2px;padding:8px 10px;font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.4;}
 .rpe-key-title{color:var(--bone);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:10px;margin-bottom:6px;border-bottom:1px solid var(--line);padding-bottom:4px;}
 .rpe-key-row{display:flex;gap:6px;white-space:nowrap;padding:1px 0;}
 .rpe-key-row span{color:var(--gold);font-weight:700;width:20px;display:inline-block;text-align:right;}
@@ -69,62 +76,62 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
   .rpe-key{width:100%;display:flex;flex-wrap:wrap;gap:4px 14px;}
   .rpe-key-title{width:100%;}
 }
-.set-head{display:flex;gap:8px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.set-head{display:flex;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
 .set-head span{width:100px;text-align:center;}
 .set-head .setnum{width:36px;}
 .set-head .delHead{width:24px;}
 .set-row{display:flex;gap:8px;align-items:center;}
-.set-row .setnum{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);width:36px;}
-.set-row input{background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:14px;padding:8px 10px;border-radius:2px;width:100px;}
+.set-row .setnum{font-family:var(--mono);font-size:11px;color:var(--muted);width:36px;}
+.set-row input{background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:var(--mono);font-size:14px;padding:8px 10px;border-radius:2px;width:100px;}
 .set-row .set-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;width:24px;flex-shrink:0;padding:0;}
 .set-row .set-del:hover{color:var(--danger);}
 .set-row.set-hidden{display:none;}
-.btn{background:var(--gold);color:#1c2321;border:none;font-family:'Oswald','Arial Narrow',sans-serif;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;font-size:13px;padding:10px 18px;border-radius:2px;cursor:pointer;}
+.btn{background:var(--gold);color:#1c2321;border:none;font-family:var(--head);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;font-size:13px;padding:10px 18px;border-radius:2px;cursor:pointer;}
 .btn:hover{background:#dbb536;}
 .log-list{display:flex;flex-direction:column;}
 .day-card{border:1px solid var(--line);border-radius:2px;background:var(--panel-2);padding:12px 14px;margin-bottom:10px;}
-.day-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;}
+.day-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--mono);font-size:12px;}
 .day-head .dh-left{display:flex;gap:10px;align-items:center;}
 .day-head .dh-date{color:var(--bone);font-weight:700;}
-.day-tag{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;}
+.day-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;}
 .day-tag.legs{background:rgba(122,143,166,0.22);color:var(--slate-blue);}
 .day-tag.push{background:rgba(201,162,39,0.2);color:var(--gold);}
 .day-tag.pull{background:rgba(217,140,95,0.2);color:#d98c5f;}
 .day-tag.other{background:rgba(139,148,144,0.2);color:var(--muted);}
 .day-ex{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px;}
-.day-ex .dx-name{color:var(--gold);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;}
-.day-ex .dx-sets{color:var(--bone);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;flex:1;text-align:right;}
+.day-ex .dx-name{color:var(--gold);font-family:var(--mono);font-size:12px;}
+.day-ex .dx-sets{color:var(--bone);font-family:var(--mono);font-size:12px;flex:1;text-align:right;}
 .log-entry{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;gap:8px;}
 .log-entry:last-child{border-bottom:none;}
 .log-left{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
-.tag{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;padding:3px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;}
+.tag{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;}
 .tag.run{background:rgba(76,122,107,0.25);color:var(--moss);}
-.log-date{color:var(--muted);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;}
-.log-detail{color:var(--bone);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;}
+.log-date{color:var(--muted);font-family:var(--mono);font-size:11px;}
+.log-detail{color:var(--bone);font-family:var(--mono);}
 .log-note{color:var(--muted);font-style:italic;}
 .del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px;}
 .del-btn:hover{color:var(--danger);}
 .empty{color:var(--muted);font-size:13px;padding:10px 0;text-align:center;}
-.status{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);text-align:center;margin-top:20px;}
-.last-time{background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:2px;padding:10px 12px;margin-bottom:10px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;color:var(--muted);display:none;line-height:1.7;}
+.status{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-top:20px;}
+.last-time{background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:2px;padding:10px 12px;margin-bottom:10px;font-family:var(--mono);font-size:12px;color:var(--muted);display:none;line-height:1.7;}
 .last-time.show{display:block;}
 .last-time b{color:var(--gold);font-weight:700;}
 .last-time .best{color:var(--good);}
 .mannequin-wrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
 .mannequin-wrap svg{flex-shrink:0;max-width:100%;height:auto;}
 .mannequin-legend{flex:1;min-width:220px;}
-.mkey{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);margin-bottom:10px;}
+.mkey{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px;}
 .mkey span.sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
-.muscle-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;}
+.muscle-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;}
 .muscle-row:last-child{border-bottom:none;}
 .muscle-row .mname{color:var(--bone);}
 .muscle-row .mstatus{font-weight:700;}
 .big-1rm{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
-.big-1rm .num{font-family:'Oswald','Arial Narrow',sans-serif;font-size:42px;font-weight:700;color:var(--gold);line-height:1;}
-.big-1rm .lbl{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;color:var(--muted);}
+.big-1rm .num{font-family:var(--head);font-size:42px;font-weight:700;color:var(--gold);line-height:1;}
+.big-1rm .lbl{font-family:var(--mono);font-size:12px;color:var(--muted);}
 .sub-note{font-size:11px;color:var(--muted);line-height:1.5;}
 .bench-row{margin-bottom:30px;}
-.bench-top{display:flex;justify-content:space-between;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;margin-bottom:6px;}
+.bench-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-bottom:6px;}
 .bench-top .bname{color:var(--bone);font-weight:600;}
 .bench-top .bval{color:var(--gold);}
 .bench-top .bval .recent{color:var(--good);}
@@ -132,25 +139,25 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 .bench-fill{height:100%;border-radius:5px;background:var(--gold);position:absolute;top:0;left:0;}
 .bench-fill.recent{background:var(--good);height:4px;top:3px;border-radius:2px;}
 .bench-marker{position:absolute;top:-4px;width:2px;height:18px;background:var(--bone);}
-.bench-marker .mlabel{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:9px;color:var(--muted);white-space:nowrap;}
+.bench-marker .mlabel{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap;}
 .bench-marker.std{background:transparent;border-left:2px dashed var(--muted);opacity:0.55;}
 .bench-marker.std .mlabel{top:14px;font-size:8px;}
 .bench-marker.std.lvl2 .mlabel{top:26px;}
 .you-marker{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:3;}
-.you-marker .ylabel{font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;white-space:nowrap;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--bg);border:1px solid currentColor;}
+.you-marker .ylabel{font-family:var(--mono);font-size:10px;white-space:nowrap;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--bg);border:1px solid currentColor;}
 .you-marker .arrow{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;}
 .you-marker.pb{color:var(--gold);top:-26px;}
 .you-marker.pb .arrow{border-top:6px solid var(--gold);}
-.you-marker.recent{color:var(--good);top:44px;flex-direction:column-reverse;}
+.you-marker.recent{color:var(--good);top:16px;flex-direction:column-reverse;}
 .you-marker.recent .arrow{border-bottom:6px solid currentColor;}
-.bench-row.pctrow{margin-bottom:18px;padding-top:34px;}
-.pct-fact{margin-top:60px;color:var(--good);font-size:11px;line-height:1.5;font-style:italic;}
-.sport-h{font-family:'Oswald','Arial Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--moss);margin:22px 0 12px 0;border-bottom:1px solid var(--line);padding-bottom:6px;}
+.bench-row.pctrow{margin-bottom:14px;padding-top:34px;}
+.pct-fact{margin-top:44px;color:var(--good);font-size:11px;line-height:1.5;font-style:italic;}
+.sport-h{font-family:var(--head);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--moss);margin:22px 0 12px 0;border-bottom:1px solid var(--line);padding-bottom:6px;}
 .sport-h:first-child{margin-top:0;}
 .trend-toggles{display:flex;gap:6px;margin-bottom:14px;}
-.trend-toggles button{flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;padding:8px 0;border-radius:2px;cursor:pointer;letter-spacing:1px;}
+.trend-toggles button{flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:12px;padding:8px 0;border-radius:2px;cursor:pointer;letter-spacing:1px;}
 .trend-toggles button.active{background:var(--gold);color:#1c2321;font-weight:700;border-color:var(--gold);}
-.trend-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);}
+.trend-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted);}
 .trend-legend .tl{display:flex;align-items:center;gap:6px;}
 .trend-legend .tl .sw{width:14px;height:3px;border-radius:2px;display:inline-block;}
 #e1rmTrend svg{width:100%;height:auto;display:block;}
@@ -213,9 +220,9 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
       <div class="mannequin-wrap">
         <svg id="mannequinSvg" width="300" height="420" viewBox="0 0 340 440"></svg>
         <div class="mannequin-legend">
+          <div class="mkey"><span class="sw" style="background:rgba(232,158,74,0.5)"></span>Undertrained (orange, darkens as trained)</div>
           <div class="mkey"><span class="sw" style="background:var(--good)"></span>In range</div>
-          <div class="mkey"><span class="sw" style="background:var(--low)"></span>Under target</div>
-          <div class="mkey"><span class="sw" style="background:var(--danger)"></span>Over target</div>
+          <div class="mkey"><span class="sw" style="background:rgb(230,32,32)"></span>Overtrained</div>
           <div id="muscleList"></div>
         </div>
       </div>
@@ -228,14 +235,16 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 
     <div class="panel"><h3>Workout History <span class="hint">— grouped by day</span></h3><div class="log-list" id="exList"></div></div>
 
-    <div class="panel">
-      <h3>Backup <span class="hint">— iOS can clear web-app data if storage runs low. Export to keep a safe copy.</span></h3>
+    <div class="panel" id="backupSection">
+      <h3>Backup <span class="hint">— iOS can clear web-app data if storage runs low. Keep a safe copy.</span></h3>
+      <button class="btn" id="backupNowBtn" style="width:100%;margin-bottom:6px;">Back up now</button>
+      <div class="sub-note" style="margin-bottom:14px;">Your <b>weekly safety backup</b>. Saves one file, <b>pr-performance-backup.json</b> — choose <b>Replace</b> when saving so it overwrites the same file. Resets the weekly reminder.</div>
       <div class="form-row">
-        <button class="btn" id="exportBtn">Export data</button>
+        <button class="btn" id="exportBtn" style="background:var(--panel-2);color:var(--bone);border:1px solid var(--line);">Export copy</button>
         <button class="btn" id="importBtn" style="background:var(--panel-2);color:var(--bone);border:1px solid var(--line);">Import data</button>
         <input type="file" id="importFile" accept="application/json,.json" style="display:none;">
       </div>
-      <div class="sub-note">Export downloads your full log as a JSON file. Import replaces the current log with a file you previously exported.</div>
+      <div class="sub-note" id="backupNote"><b>Export copy</b> downloads a separate dated file (e.g. to move to another device or keep an archive) — it doesn't touch your weekly backup. <b>Import</b> replaces your current log with a chosen file.</div>
     </div>
   </div>
 
@@ -263,6 +272,11 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
     <div class="panel">
       <h3>Profile <span class="hint">— your bodyweight tunes the strength percentiles &amp; bodyweight-exercise loads</span></h3>
       <div class="pr-row"><label>Bodyweight (kg)</label><input type="number" id="bodyWeight" step="0.5"></div>
+      <div class="form-row" style="margin-top:10px;">
+        <input type="date" id="bwDate">
+        <button class="btn" id="logBwBtn">Log weight</button>
+      </div>
+      <div class="sub-note" id="bwHistNote" style="margin-top:8px;"></div>
     </div>
     <div class="panel">
       <h3>e1RM Trend <span class="hint">— estimated 1RM over time for the big three</span></h3>
@@ -277,6 +291,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
         <span class="tl"><span class="sw" style="background:var(--slate-blue)"></span>Squat</span>
         <span class="tl"><span class="sw" style="background:var(--gold)"></span>Bench</span>
         <span class="tl"><span class="sw" style="background:var(--moss)"></span>Deadlift</span>
+        <span class="tl"><span class="sw" style="background:var(--bone);height:0;border-top:2px dashed var(--bone)"></span>Bodyweight (right axis)</span>
       </div>
     </div>
     <div class="card">
@@ -304,12 +319,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
     <div class="panel">
       <h3>Strength Percentiles <span class="hint">— gold pointer = your PB &amp; percentile · green pointer = latest e1RM · dashed lines = standard thresholds</span></h3>
       <div id="pctPanel"></div>
-      <div class="sub-note" style="margin-top:10px;">Percentiles compare against people who lift and log their numbers — a far stronger pool than the general public. Standards are published for a ~100kg male and scaled to your bodyweight (set on the Me tab) using allometric 2/3-power scaling. Clean and Front Squat standards are rougher approximations than the big three.</div>
-    </div>
-    <div class="panel">
-      <h3>Elite Sport Benchmarks</h3>
-      <div id="sportBench"></div>
-      <div class="sub-note" style="margin-top:12px;">Sources: rugby pro minimums &amp; reported bests (RugbyPass / team S&amp;C standards); NFL lineman ranges as commonly reported; Hyrox elite pace from race-data analyses; powerlifting standards from published tables.</div>
+      <div class="sub-note" style="margin-top:10px;">Percentiles compare against people who lift and log their numbers — a far stronger pool than the general public. Standards are published for a ~100kg male and scaled to your bodyweight (set on the Me tab) using allometric 2/3-power scaling. Clean and Front Squat standards are rougher approximations than the big three. Some milestone facts reference approximate elite-sport benchmarks (rugby, NFL, powerlifting, weightlifting).</div>
     </div>
   </div>
 
@@ -319,9 +329,8 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 <script>
 const DATA_KEY='field-log-data-v2';
 function bodyWeightKg(){return state.bodyweight||100;}
+function workoutCount(){return new Set(state.exercises.map(e=>e.date)).size;}
 
-// Storage layer: localStorage first (works as an installed iPhone home-screen app),
-// falling back to window.storage so the in-Claude preview still saves.
 const storage={
   async get(key){
     try{const v=localStorage.getItem(key);if(v!==null)return{value:v};}catch(e){}
@@ -337,9 +346,10 @@ const storage={
 };
 const defaultState={
   entries:[],exercises:[],customExercises:[],
-  bodyweight:100,
+  bodyweight:100,bodyweightLog:[],
   prs:{squat:192.5,deadlift:225,bench:150,frontSquat:130,clean:120,ohp:80},
   goals:{runKm:100},
+  lastDay:'legs',lastExercise:null,lastExport:null,
   hr:{rest:null,max:null}
 };
 let state=JSON.parse(JSON.stringify(defaultState));
@@ -360,41 +370,40 @@ const LIBRARY={
   'Pistol Squats':{cat:'legs',bw:true,bwF:0.95,emg:false,map:{quads:0.45,glutes:0.35,hamstrings:0.10,abs:0.10}},
   'Deadlift':{cat:'pull',emg:true,map:{lowerBack:0.27,glutes:0.23,hamstrings:0.18,traps:0.17,lats:0.15}},
   'Clean':{cat:'pull',emg:false,map:{traps:0.25,glutes:0.20,hamstrings:0.20,quads:0.15,lowerBack:0.10,forearms:0.10}},
-  'Barbell Row':{cat:'pull',emg:true,map:{lats:0.38,traps:0.22,rearDelts:0.15,biceps:0.15,lowerBack:0.10}},
-  'Pull-up':{cat:'pull',emg:true,bwAdd:true,bwF:0.95,map:{lats:0.48,biceps:0.27,rearDelts:0.15,forearms:0.10}},
-  'Lat Pulldown':{cat:'pull',emg:true,map:{lats:0.55,biceps:0.25,rearDelts:0.10,forearms:0.10}},
-  'Face Pull':{cat:'pull',emg:false,map:{rearDelts:0.50,traps:0.30,sideDelts:0.20}},
-  'Rear Delt Fly':{cat:'pull',emg:false,map:{rearDelts:0.80,traps:0.20}},
+  'Barbell Row':{cat:'pull',emg:true,map:{lats:0.38,traps:0.22,delts:0.15,biceps:0.15,lowerBack:0.10}},
+  'Pull-up':{cat:'pull',emg:true,bwAdd:true,bwF:0.95,map:{lats:0.48,biceps:0.27,delts:0.15,forearms:0.10}},
+  'Lat Pulldown':{cat:'pull',emg:true,map:{lats:0.55,biceps:0.25,delts:0.10,forearms:0.10}},
+  'Face Pull':{cat:'pull',emg:false,map:{delts:0.70,traps:0.30}},
+  'Rear Delt Fly':{cat:'pull',emg:false,map:{delts:0.80,traps:0.20}},
   'Bicep Curl':{cat:'pull',emg:true,map:{biceps:0.88,forearms:0.12}},
   'Hammer Curl':{cat:'pull',emg:true,map:{biceps:0.58,forearms:0.42}},
-  'Bench Press':{cat:'push',emg:true,map:{chest:0.50,frontDelts:0.25,triceps:0.25}},
-  'Incline Bench Press':{cat:'push',emg:true,map:{chest:0.45,frontDelts:0.35,triceps:0.20}},
-  'Dip':{cat:'push',emg:true,bwAdd:true,bwF:0.9,map:{chest:0.42,triceps:0.38,frontDelts:0.20}},
-  'Push-up':{cat:'push',bw:true,bwF:0.64,emg:true,map:{chest:0.50,frontDelts:0.25,triceps:0.25}},
-  'Cable Fly':{cat:'push',emg:true,map:{chest:0.88,frontDelts:0.12}},
-  'Overhead Press':{cat:'push',emg:true,map:{frontDelts:0.48,sideDelts:0.22,triceps:0.22,traps:0.08}},
-  'Arnold Press':{cat:'push',emg:false,map:{sideDelts:0.38,frontDelts:0.38,triceps:0.16,rearDelts:0.08}},
-  'Lateral Raise':{cat:'push',emg:true,map:{sideDelts:0.88,traps:0.12}},
+  'Bench Press':{cat:'push',emg:true,map:{chest:0.50,delts:0.25,triceps:0.25}},
+  'Incline Bench Press':{cat:'push',emg:true,map:{chest:0.45,delts:0.35,triceps:0.20}},
+  'Dip':{cat:'push',emg:true,bwAdd:true,bwF:0.9,map:{chest:0.42,triceps:0.38,delts:0.20}},
+  'Push-up':{cat:'push',bw:true,bwF:0.64,emg:true,map:{chest:0.50,delts:0.25,triceps:0.25}},
+  'Cable Fly':{cat:'push',emg:true,map:{chest:0.88,delts:0.12}},
+  'Overhead Press':{cat:'push',emg:true,map:{delts:0.70,triceps:0.22,traps:0.08}},
+  'Arnold Press':{cat:'push',emg:false,map:{delts:0.84,triceps:0.16}},
+  'Lateral Raise':{cat:'push',emg:true,map:{delts:0.88,traps:0.12}},
   'Tricep Pushdown':{cat:'push',emg:true,map:{triceps:1.0}},
   'Skull Crusher':{cat:'push',emg:true,map:{triceps:1.0}},
   'Hanging Leg Raise':{cat:'core',emg:true,map:{abs:0.88,forearms:0.12}},
   'Cable Crunch':{cat:'core',emg:true,map:{abs:1.0}},
-  'Ab Rollout':{cat:'core',bw:true,bwF:0.5,emg:true,map:{abs:0.72,lats:0.14,frontDelts:0.14}},
-  'Banded Rotations':{cat:'core',bw:true,bwF:0.2,emg:false,map:{abs:0.90,rearDelts:0.10}},
+  'Ab Rollout':{cat:'core',bw:true,bwF:0.5,emg:true,map:{abs:0.72,lats:0.14,delts:0.14}},
+  'Banded Rotations':{cat:'core',bw:true,bwF:0.2,emg:false,map:{abs:0.90,delts:0.10}},
 };
-// Fold saved custom exercises back into the working library so they persist in the dropdown
 function registerCustomExercises(){
   (state.customExercises||[]).forEach(c=>{
     if(!LIBRARY[c.name])LIBRARY[c.name]={cat:c.cat,emg:false,map:c.map,custom:true};
   });
 }
-const MUSCLES=['chest','frontDelts','sideDelts','rearDelts','biceps','triceps','forearms','abs','lats','traps','lowerBack','glutes','quads','hamstrings','calves'];
-const MUSCLE_LABEL={chest:'Chest',frontDelts:'Front Delts',sideDelts:'Side Delts',rearDelts:'Rear Delts',biceps:'Biceps',triceps:'Triceps',forearms:'Forearms',abs:'Abs',lats:'Lats',traps:'Traps',lowerBack:'Lower Back',glutes:'Glutes',quads:'Quads',hamstrings:'Hamstrings',calves:'Calves'};
+const MUSCLES=['chest','delts','biceps','triceps','forearms','abs','lats','traps','lowerBack','glutes','quads','hamstrings','calves'];
+const MUSCLE_LABEL={chest:'Chest',delts:'Delts',biceps:'Biceps',triceps:'Triceps',forearms:'Forearms',abs:'Abs',lats:'Lats',traps:'Traps',lowerBack:'Lower Back',glutes:'Glutes',quads:'Quads',hamstrings:'Hamstrings',calves:'Calves'};
 const MUSCLE_RANGE={
   quads:[8000,20000],glutes:[8000,18000],hamstrings:[6000,15000],
   chest:[6000,15000],lats:[6000,15000],traps:[4000,12000],
   lowerBack:[2000,8000],calves:[3000,8000],abs:[2000,6000],
-  frontDelts:[3000,8000],sideDelts:[800,2500],rearDelts:[1000,3000],
+  delts:[5000,13500],
   biceps:[2000,5000],triceps:[2500,6000],forearms:[1500,5000]
 };
 const STANDARDS={
@@ -409,8 +418,6 @@ const STANDARDS={
 const PCT_ANCHORS=[5,20,50,80,95];
 const PR_MATCH={'Squat':'squat','Front Squat':'frontSquat','Bench Press':'bench','Deadlift':'deadlift','Overhead Press':'ohp','Clean':'clean'};
 
-// Milestone facts per lift, ascending by kg. As your PB climbs you unlock the highest one you've passed.
-// Comparisons use approximate ("roughly/about") figures; the clearly hypothetical ones are framed as thought experiments.
 const FACTS={
   'Squat':[
     {kg:50,fact:"50kg across your shoulders is about the weight of a three-seater sofa."},
@@ -426,14 +433,14 @@ const FACTS={
     {kg:150,fact:"150kg across your shoulders is about the weight of an adult male black bear."},
     {kg:160,fact:"160kg across your shoulders is about the weight of a silverback gorilla."},
     {kg:170,fact:"170kg across your shoulders is about the weight of an upright piano."},
-    {kg:180,fact:"180kg across your shoulders is about the weight of a full-grown male reindeer."},
+    {kg:180,fact:"180kg is around a professional rugby forward's reported minimum squat — roughly 1.8× bodyweight."},
     {kg:190,fact:"190kg across your shoulders is about the weight of an adult male African lion."},
     {kg:200,fact:"200kg across your shoulders is about the weight of a fully fuelled sportbike."},
     {kg:210,fact:"210kg across your shoulders is about the weight of a mature red deer stag."},
     {kg:220,fact:"220kg across your shoulders is about the weight of an adult male Bengal tiger."},
     {kg:230,fact:"230kg across your shoulders is about the weight of a full-grown pony."},
     {kg:240,fact:"240kg across your shoulders is about the weight of a baby grand piano."},
-    {kg:250,fact:"250kg across your shoulders is about the weight of a bull grey seal."},
+    {kg:250,fact:"A 250kg squat is about 2.5× bodyweight — a drug-free powerlifting 'elite' standard."},
     {kg:260,fact:"260kg across your shoulders is about the weight of a fully stocked vending machine."},
     {kg:270,fact:"270kg across your shoulders is about the weight of an adult male grizzly bear."},
     {kg:280,fact:"280kg across your shoulders is about the weight of a full-size slate pool table."},
@@ -475,11 +482,11 @@ const FACTS={
     {kg:170,fact:"170kg pressed off your chest is about the weight of an upright piano."},
     {kg:180,fact:"180kg pressed off your chest is about the weight of a full-grown male reindeer."},
     {kg:190,fact:"190kg pressed off your chest is about the weight of an adult male African lion."},
-    {kg:200,fact:"200kg pressed off your chest is about the weight of a fully fuelled sportbike."},
+    {kg:200,fact:"A 200kg bench sits between an elite rugby forward (~190kg) and a typical NFL lineman (~204kg)."},
     {kg:210,fact:"210kg pressed off your chest is about the weight of a mature red deer stag."},
     {kg:220,fact:"220kg pressed off your chest is about the weight of an adult male Bengal tiger."},
     {kg:240,fact:"240kg pressed off your chest is about the weight of a baby grand piano."},
-    {kg:250,fact:"250kg pressed off your chest is about the weight of a bull grey seal."},
+    {kg:250,fact:"250kg is around the very top end of reported NFL lineman bench presses."},
     {kg:280,fact:"280kg pressed off your chest is about the weight of a full-size slate pool table."},
     {kg:300,fact:"300kg pressed off your chest is about the weight of a large touring motorcycle."}
   ],
@@ -502,7 +509,7 @@ const FACTS={
     {kg:210,fact:"210kg pulled off the floor is roughly the weight of a mature red deer stag."},
     {kg:220,fact:"220kg pulled off the floor is about the weight of an adult male Bengal tiger — and under half Hafthor Bjornsson's 510kg world record."},
     {kg:230,fact:"230kg pulled off the floor is roughly the weight of a full-grown pony."},
-    {kg:240,fact:"240kg pulled off the floor is roughly the weight of a baby grand piano."},
+    {kg:240,fact:"240kg is around the drug-free powerlifting 'advanced' deadlift standard for a ~100kg lifter."},
     {kg:250,fact:"250kg pulled off the floor is roughly the weight of a bull grey seal."},
     {kg:260,fact:"260kg pulled off the floor is roughly the weight of a fully stocked vending machine."},
     {kg:280,fact:"280kg pulled off the floor is roughly the weight of a full-size slate pool table."},
@@ -539,7 +546,7 @@ const FACTS={
     {kg:80,fact:"80kg snapped to your shoulders is roughly the weight of a full washing machine."},
     {kg:90,fact:"90kg snapped to your shoulders is roughly the weight of a wild boar in prime condition."},
     {kg:100,fact:"100kg snapped to your shoulders is roughly the weight of an adult giant panda."},
-    {kg:110,fact:"110kg snapped to your shoulders is roughly the weight of a large American fridge-freezer."},
+    {kg:110,fact:"110kg is roughly an intermediate competitive clean; elite men clean around 177kg and up."},
     {kg:120,fact:"120kg snapped to your shoulders is roughly the weight of a newborn elephant calf."},
     {kg:130,fact:"130kg snapped to your shoulders is roughly the weight of a fully grown ostrich."},
     {kg:140,fact:"140kg snapped to your shoulders is roughly the weight of an adult lioness."},
@@ -559,8 +566,6 @@ function factFor(name,pb){
   return f;
 }
 
-// Raise PBs from ACTUAL logged reps only — the heaviest weight lifted for >=1 rep.
-// Never uses e1RM, and never lowers an existing PB. Returns any lifts that hit a new PB.
 function updatePBsFromLogs(){
   const gained=[];
   Object.keys(PR_MATCH).forEach(name=>{
@@ -578,8 +583,6 @@ function updatePBsFromLogs(){
 
 function e1rm(w,r){if(!w||!r)return 0;if(r===1)return w;
   const ep=w*(1+r/30);const br=r<37?w*36/(37-r):ep;return(ep+br)/2;}
-// Strength standards are published for a ~100kg male. Scale them to the user's bodyweight
-// using allometric (2/3-power) scaling: absolute strength rises with size, but not proportionally.
 function bwFactor(){return Math.pow((state.bodyweight||100)/100,2/3);}
 function standardsFor(n){const s=STANDARDS[n];if(!s)return null;const f=bwFactor();return s.map(v=>v*f);}
 function percentileFor(n,x){
@@ -592,6 +595,7 @@ function percentileFor(n,x){
 const todayISO=()=>new Date().toISOString().slice(0,10);
 document.getElementById('entryDate').value=todayISO();
 document.getElementById('exDate').value=todayISO();
+document.getElementById('bwDate').value=todayISO();
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 
 document.querySelectorAll('.tab').forEach(t=>{
@@ -613,7 +617,6 @@ document.querySelectorAll('.tab').forEach(t=>{
       <button type="button" class="set-del" data-set="${i}" title="remove this set">×</button></div>`;
   }
   document.getElementById('setGrid').innerHTML=html;
-  // per-set delete: clears the row's inputs and hides it until the next reset
   document.getElementById('setGrid').querySelectorAll('.set-del').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const i=btn.getAttribute('data-set');
@@ -632,7 +635,6 @@ function clearSetRows(){
     document.getElementById('setRow'+i).classList.remove('set-hidden');
   }
 }
-// Pre-fill the set rows with last time's weights (reps & RPE left blank to fill in / beat)
 function prefillFromLast(name){
   clearSetRows();
   if(name==='Custom exercise…')return;
@@ -662,6 +664,12 @@ function populateExSelect(){
   const og=document.createElement('optgroup');og.label='Custom';
   const o=document.createElement('option');o.value='Custom exercise…';o.textContent='Custom exercise…';
   og.appendChild(o);sel.appendChild(og);
+}
+function applyLastExercise(){
+  const sel=document.getElementById('exSelect');
+  if(state.lastExercise&&[...sel.options].some(o=>o.value===state.lastExercise)){
+    sel.value=state.lastExercise;
+  }
 }
 populateExSelect();
 
@@ -716,18 +724,20 @@ async function load(){
       state.customExercises=p.customExercises||[];
       state.entries=(p.entries||[]).filter(e=>e.type==='run');
     }
-    st.textContent='log saved · '+state.entries.length+' runs, '+state.exercises.length+' exercises';
+    st.textContent='log saved · '+state.entries.length+' runs, '+workoutCount()+' workouts';
   }catch(e){st.textContent='starting a fresh log';}
   registerCustomExercises();
   updatePBsFromLogs();
+  if(state.lastDay)document.getElementById('daySelect').value=state.lastDay;
   populateExSelect();
+  applyLastExercise();
   render();updateDayRecall();updateLastTime();toggleWeightInputs();
   prefillFromLast(document.getElementById('exSelect').value);
 }
 async function save(){
   try{
     await storage.set(DATA_KEY,JSON.stringify(state));
-    document.getElementById('statusLine').textContent='log saved · '+state.entries.length+' runs, '+state.exercises.length+' exercises';
+    document.getElementById('statusLine').textContent='log saved · '+state.entries.length+' runs, '+workoutCount()+' workouts';
   }catch(e){document.getElementById('statusLine').textContent='save failed — try again';}
 }
 
@@ -816,9 +826,9 @@ function drawCompass(fr){
   const lines=axes.map(k=>{const p=axisPoint(cx,cy,R,A[k],1);return`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" style="stroke:var(--line);stroke-width:1"/>`;}).join('');
   const rings=[0.33,0.66,1].map(f=>`<polygon points="${ring(R*f)}" style="fill:none;stroke:var(--line);stroke-width:1"/>`).join('');
   const lp=axisPoint(cx,cy,R+16,A.legs,1),pp=axisPoint(cx,cy,R+16,A.pull,1);
-  const lbl=`<text x="${cx}" y="${cy-R-10}" text-anchor="middle" style="fill:var(--gold);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;">PUSH</text>
-  <text x="${lp.x+4}" y="${lp.y+4}" text-anchor="start" style="fill:var(--slate-blue);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;">LEGS</text>
-  <text x="${pp.x-4}" y="${pp.y+4}" text-anchor="end" style="fill:#d98c5f;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:10px;">PULL</text>`;
+  const lbl=`<text x="${cx}" y="${cy-R-10}" text-anchor="middle" style="fill:var(--gold);font-family:var(--mono);font-size:10px;">PUSH</text>
+  <text x="${lp.x+4}" y="${lp.y+4}" text-anchor="start" style="fill:var(--slate-blue);font-family:var(--mono);font-size:10px;">LEGS</text>
+  <text x="${pp.x-4}" y="${pp.y+4}" text-anchor="end" style="fill:#d98c5f;font-family:var(--mono);font-size:10px;">PULL</text>`;
   const cols={push:'var(--gold)',legs:'var(--slate-blue)',pull:'#d98c5f'};
   const dots=pts.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="4" style="fill:${cols[axes[i]]}"/>`).join('');
   document.getElementById('compassSvg').innerHTML=`${rings}${lines}<polygon points="${poly}" style="fill:rgba(201,162,39,0.18);stroke:var(--gold);stroke-width:2"/>${dots}${lbl}<circle cx="${cx}" cy="${cy}" r="2" style="fill:var(--muted)"/>`;
@@ -830,8 +840,8 @@ function silhouette(x){
 }
 function frontRegions(x){
   let s='';
-  s+=mregion(`M ${x-24} 55 q -12 2 -16 12 q -2 8 3 13 q 8 3 14 -3 q 4 -9 -1 -22 Z`,'frontDelts');
-  s+=mregion(`M ${x+24} 55 q 12 2 16 12 q 2 8 -3 13 q -8 3 -14 -3 q -4 -9 1 -22 Z`,'frontDelts');
+  s+=mregion(`M ${x-24} 55 q -12 2 -16 12 q -2 8 3 13 q 8 3 14 -3 q 4 -9 -1 -22 Z`,'delts');
+  s+=mregion(`M ${x+24} 55 q 12 2 16 12 q 2 8 -3 13 q -8 3 -14 -3 q -4 -9 1 -22 Z`,'delts');
   s+=mregion(`M ${x-2} 60 l -20 0 q -6 12 -3 22 q 3 8 12 9 q 8 0 11 -6 Z`,'chest');
   s+=mregion(`M ${x+2} 60 l 20 0 q 6 12 3 22 q -3 8 -12 9 q -8 0 -11 -6 Z`,'chest');
   s+=mregion(`M ${x-40} 84 q -8 4 -9 16 q 0 12 5 18 q 7 2 10 -6 q 3 -14 -6 -28 Z`,'biceps');
@@ -839,6 +849,11 @@ function frontRegions(x){
   s+=mregion(`M ${x-47} 122 q -5 8 -6 20 l -3 22 q 4 6 9 2 l 6 -24 q 2 -12 -6 -20 Z`,'forearms');
   s+=mregion(`M ${x+47} 122 q 5 8 6 20 l 3 22 q -4 6 -9 2 l -6 -24 q -2 -12 6 -20 Z`,'forearms');
   s+=mregion(`M ${x} 95 q -12 0 -14 8 l -2 34 q 2 12 16 12 q 14 0 16 -12 l -2 -34 q -2 -8 -14 -8 Z`,'abs');
+  s+=`<g style="pointer-events:none">
+    <line x1="${x}" y1="100" x2="${x}" y2="146" style="stroke:rgba(18,22,20,0.55);stroke-width:1.4"/>
+    <line x1="${x-11}" y1="116" x2="${x+11}" y2="116" style="stroke:rgba(18,22,20,0.55);stroke-width:1.4"/>
+    <line x1="${x-11}" y1="130" x2="${x+11}" y2="130" style="stroke:rgba(18,22,20,0.55);stroke-width:1.4"/>
+  </g>`;
   s+=mregion(`M ${x-6} 155 q -16 2 -19 14 l -4 52 q 0 14 8 20 q 8 3 11 -6 l 6 -60 Z`,'quads');
   s+=mregion(`M ${x+6} 155 q 16 2 19 14 l 4 52 q 0 14 -8 20 q -8 3 -11 -6 l -6 -60 Z`,'quads');
   s+=mregion(`M ${x-19} 255 q -6 8 -6 20 l -1 30 q 4 8 9 3 l 4 -32 q 1 -13 -6 -21 Z`,'calves');
@@ -848,8 +863,8 @@ function frontRegions(x){
 function backRegions(x){
   let s='';
   s+=mregion(`M ${x} 48 l -26 14 q 10 10 26 10 q 16 0 26 -10 Z`,'traps');
-  s+=mregion(`M ${x-26} 58 q -11 3 -14 13 q -1 8 4 12 q 8 2 13 -4 q 3 -9 -3 -21 Z`,'rearDelts');
-  s+=mregion(`M ${x+26} 58 q 11 3 14 13 q 1 8 -4 12 q -8 2 -13 -4 q -3 -9 3 -21 Z`,'rearDelts');
+  s+=mregion(`M ${x-26} 58 q -11 3 -14 13 q -1 8 4 12 q 8 2 13 -4 q 3 -9 -3 -21 Z`,'delts');
+  s+=mregion(`M ${x+26} 58 q 11 3 14 13 q 1 8 -4 12 q -8 2 -13 -4 q -3 -9 3 -21 Z`,'delts');
   s+=mregion(`M ${x-4} 74 l -20 4 q -6 18 -1 34 q 5 14 17 18 l 4 -26 Z`,'lats');
   s+=mregion(`M ${x+4} 74 l 20 4 q 6 18 1 34 q -5 14 -17 18 l -4 -26 Z`,'lats');
   s+=mregion(`M ${x-40} 84 q -8 4 -9 16 q 0 12 5 18 q 7 2 10 -6 q 3 -14 -6 -28 Z`,'triceps');
@@ -865,16 +880,28 @@ function backRegions(x){
   s+=mregion(`M ${x+18} 272 q 8 6 8 18 l 0 26 q -5 8 -10 3 l -4 -28 q -1 -12 6 -19 Z`,'calves');
   return s;
 }
+function muscleColor(m,v){
+  const [floor,ceiling]=MUSCLE_RANGE[m];
+  if(v>ceiling) return 'rgba(230,32,32,0.95)';        // overtrained → vivid red
+  if(v>=floor)  return 'rgba(95,174,130,0.92)';       // in range → green
+  const t=floor>0?Math.min(v/floor,1):0;
+  const step=Math.min(Math.floor(t*10),9);            // one shade per 10%
+  const f=step/9;
+  const r=Math.round(232-(232-150)*f);
+  const g=Math.round(158-(158-70)*f);
+  const b=Math.round(74-(74-18)*f);
+  const a=(0.30+0.60*f).toFixed(2);
+  return `rgba(${r},${g},${b},${a})`;
+}
 function renderMannequin(vol){
   const svg=document.getElementById('mannequinSvg');
   svg.innerHTML=silhouette(85)+frontRegions(85)+silhouette(255)+backRegions(255)+
-    `<text x="85" y="432" text-anchor="middle" style="fill:var(--muted);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1px;">FRONT</text>
-     <text x="255" y="432" text-anchor="middle" style="fill:var(--muted);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1px;">BACK</text>`;
-  const sc={good:'var(--good)',low:'var(--low)',high:'var(--danger)'};
+    `<text x="85" y="432" text-anchor="middle" style="fill:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:1px;">FRONT</text>
+     <text x="255" y="432" text-anchor="middle" style="fill:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:1px;">BACK</text>`;
   svg.querySelectorAll('.mreg').forEach(el=>{
     const m=el.getAttribute('data-muscle');const v=vol[m]||0;
-    el.style.fill=sc[muscleStatus(m,v)];
-    el.style.opacity=v===0?'0.5':'0.95';
+    el.style.fill=muscleColor(m,v);
+    el.style.opacity='1';
   });
 }
 
@@ -929,11 +956,13 @@ function renderPercentiles(){
     const p=percentileFor(n,v);const s=standardsFor(n);
     const recent=latestE1RM(n);
     const pbPos=Math.min(v/s[4],1)*100;
-    const recentMarker=recent?`<div class="you-marker recent" style="left:${Math.min(recent.e/s[4],1)*100}%"><span class="ylabel">e1RM ${recent.e.toFixed(0)}kg</span><span class="arrow"></span></div>`:'';
+    const recentPos=recent?Math.min(recent.e/s[4],1)*100:0;
+    const recentMarker=recent?`<div class="you-marker recent" style="left:${recentPos}%"><span class="ylabel">e1RM ${recent.e.toFixed(0)}kg</span><span class="arrow"></span></div>`:'';
     const fact=factFor(n,v);
     html+=`<div class="bench-row pctrow">
       <div class="bench-top"><span class="bname">${n}</span></div>
       <div class="bench-track"><div class="bench-fill" style="width:${pbPos}%"></div>
+        ${recent?`<div class="bench-fill recent" style="width:${recentPos}%"></div>`:''}
         <div class="you-marker pb" style="left:${pbPos}%"><span class="ylabel">PB ${v}kg · top ${100-p}%</span><span class="arrow"></span></div>
         ${recentMarker}
         <div class="bench-marker std" style="left:${s[2]/s[4]*100}%"><div class="mlabel">Int ${Math.round(s[2])}</div></div>
@@ -985,7 +1014,6 @@ function renderMonthProgress(){
 }
 
 let trendMonths=3;
-// Best e1RM per session date for a lift, within [sinceISO, today]
 function e1rmSeries(name,sinceISO){
   const byDate={};
   state.exercises.filter(e=>e.name===name&&e.date>=sinceISO).forEach(ex=>{
@@ -995,51 +1023,91 @@ function e1rmSeries(name,sinceISO){
   });
   return Object.keys(byDate).sort().map(d=>({t:new Date(d).getTime(),date:d,e:byDate[d]}));
 }
+function bodyweightSeries(sinceISO){
+  return (state.bodyweightLog||[]).filter(b=>b.date>=sinceISO)
+    .slice().sort((a,b)=>a.date.localeCompare(b.date))
+    .map(b=>({t:new Date(b.date).getTime(),date:b.date,kg:b.kg}));
+}
 function renderE1rmTrend(){
   const host=document.getElementById('e1rmTrend');
   if(!host)return;
   const sinceISO=monthsAgoISO(trendMonths);
   const defs=[['Squat','var(--slate-blue)'],['Bench Press','var(--gold)'],['Deadlift','var(--moss)']];
   const series=defs.map(([n,c])=>({name:n,color:c,pts:e1rmSeries(n,sinceISO)}));
+  const bwPts=bodyweightSeries(sinceISO);
   const total=series.reduce((a,s)=>a+s.pts.length,0);
-  if(total===0){host.innerHTML='<div class="empty">No logged squat, bench or deadlift sets in this window yet.</div>';return;}
-  const W=660,H=280,padL=46,padR=14,padT=14,padB=32;
+  if(total===0&&bwPts.length===0){host.innerHTML='<div class="empty">No logged squat, bench, deadlift or bodyweight in this window yet.</div>';return;}
+  const W=660,H=280,padL=46,padR=42,padT=14,padB=32;
   const plotW=W-padL-padR,plotH=H-padT-padB;
   const t1=new Date().getTime();
   const t0=new Date(sinceISO).getTime();
-  const allE=series.flatMap(s=>s.pts.map(p=>p.e));
-  let minE=Math.min(...allE),maxE=Math.max(...allE);
-  if(minE===maxE){minE-=5;maxE+=5;}
-  const pad=(maxE-minE)*0.12;minE=Math.max(0,minE-pad);maxE=maxE+pad;
   const xOf=t=>t1===t0?padL+plotW:padL+((t-t0)/(t1-t0))*plotW;
-  const yOf=e=>padT+plotH-((e-minE)/(maxE-minE))*plotH;
-  // y gridlines/labels
-  let grid='',ticks=4;
-  for(let i=0;i<=ticks;i++){
-    const e=minE+(maxE-minE)*i/ticks;const y=yOf(e);
-    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" style="stroke:var(--line);stroke-width:1"/>`;
-    grid+=`<text x="${padL-6}" y="${y+3}" text-anchor="end" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${Math.round(e)}</text>`;
+  const haveE=total>0;
+
+  let minE,maxE;
+  if(haveE){
+    const allE=series.flatMap(s=>s.pts.map(p=>p.e));
+    minE=Math.min(...allE);maxE=Math.max(...allE);
+  } else {
+    minE=Math.min(...bwPts.map(p=>p.kg));maxE=Math.max(...bwPts.map(p=>p.kg));
   }
-  // x labels: start / mid / end dates
+  if(minE===maxE){minE-=5;maxE+=5;}
+  const epad=(maxE-minE)*0.12;minE=Math.max(0,minE-epad);maxE=maxE+epad;
+  const yOf=e=>padT+plotH-((e-minE)/(maxE-minE))*plotH;
+
+  let minBW=0,maxBW=0,yBW=null;
+  if(bwPts.length&&haveE){
+    minBW=Math.min(...bwPts.map(p=>p.kg));maxBW=Math.max(...bwPts.map(p=>p.kg));
+    if(minBW===maxBW){minBW-=3;maxBW+=3;}
+    const minSpan=6; // keep small fluctuations from looking dramatic
+    if(maxBW-minBW<minSpan){const mid=(minBW+maxBW)/2;minBW=mid-minSpan/2;maxBW=mid+minSpan/2;}
+    const bpad=(maxBW-minBW)*0.15;minBW-=bpad;maxBW+=bpad;
+    yBW=kg=>padT+plotH-((kg-minBW)/(maxBW-minBW))*plotH;
+  }
+
+  const ticks=4;
+  let grid='';
+  for(let i=0;i<=ticks;i++){
+    const frac=i/ticks;const y=padT+plotH-frac*plotH;
+    const e=minE+(maxE-minE)*frac;
+    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" style="stroke:var(--line);stroke-width:1"/>`;
+    grid+=`<text x="${padL-6}" y="${y+3}" text-anchor="end" style="fill:var(--muted);font-family:var(--mono);font-size:10px;">${Math.round(e)}</text>`;
+    if(yBW){
+      const bw=minBW+(maxBW-minBW)*frac;
+      grid+=`<text x="${W-padR+6}" y="${y+3}" text-anchor="start" style="fill:var(--bone);font-family:var(--mono);font-size:10px;">${Math.round(bw)}</text>`;
+    }
+  }
   const fmt=iso=>{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});};
   const midISO=new Date((t0+t1)/2).toISOString().slice(0,10);
-  const xlabels=`<text x="${padL}" y="${H-10}" text-anchor="start" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(sinceISO)}</text>
-  <text x="${padL+plotW/2}" y="${H-10}" text-anchor="middle" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(midISO)}</text>
-  <text x="${W-padR}" y="${H-10}" text-anchor="end" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(todayISO())}</text>`;
+  const xlabels=`<text x="${padL}" y="${H-10}" text-anchor="start" style="fill:var(--muted);font-family:var(--mono);font-size:10px;">${fmt(sinceISO)}</text>
+  <text x="${padL+plotW/2}" y="${H-10}" text-anchor="middle" style="fill:var(--muted);font-family:var(--mono);font-size:10px;">${fmt(midISO)}</text>
+  <text x="${W-padR}" y="${H-10}" text-anchor="end" style="fill:var(--muted);font-family:var(--mono);font-size:10px;">${fmt(todayISO())}</text>`;
+
   let lines='';
+  if(bwPts.length){
+    const yfn=yBW||yOf;
+    if(bwPts.length===1){
+      const p=bwPts[0];lines+=`<rect x="${xOf(p.t)-3}" y="${yfn(p.kg)-3}" width="6" height="6" style="fill:var(--bone)"/>`;
+    } else {
+      const poly=bwPts.map(p=>`${xOf(p.t).toFixed(1)},${yfn(p.kg).toFixed(1)}`).join(' ');
+      lines+=`<polyline points="${poly}" style="fill:none;stroke:var(--bone);stroke-width:2;stroke-dasharray:5 4;stroke-linejoin:round"/>`;
+      lines+=bwPts.map(p=>`<rect x="${xOf(p.t)-2.5}" y="${yfn(p.kg)-2.5}" width="5" height="5" style="fill:var(--bone)"/>`).join('');
+    }
+  }
   series.forEach(s=>{
     if(s.pts.length===0)return;
     if(s.pts.length===1){
-      const p=s.pts[0];
-      lines+=`<circle cx="${xOf(p.t)}" cy="${yOf(p.e)}" r="4" style="fill:${s.color}"/>`;
+      const p=s.pts[0];lines+=`<circle cx="${xOf(p.t)}" cy="${yOf(p.e)}" r="4" style="fill:${s.color}"/>`;
     } else {
       const poly=s.pts.map(p=>`${xOf(p.t).toFixed(1)},${yOf(p.e).toFixed(1)}`).join(' ');
       lines+=`<polyline points="${poly}" style="fill:none;stroke:${s.color};stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round"/>`;
       lines+=s.pts.map(p=>`<circle cx="${xOf(p.t)}" cy="${yOf(p.e)}" r="3" style="fill:${s.color}"/>`).join('');
     }
   });
+  const leftTitle=haveE?'e1RM kg':'kg';
+  const rightTitle=yBW?`<text x="${W-8}" y="${padT+plotH/2}" style="fill:var(--bone);font-family:var(--mono);font-size:10px;" transform="rotate(90 ${W-8} ${padT+plotH/2})">kg BW</text>`:'';
   host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${lines}${xlabels}
-    <text x="12" y="${padT+8}" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;" transform="rotate(-90 12 ${padT+plotH/2})">e1RM kg</text></svg>`;
+    <text x="12" y="${padT+8}" style="fill:var(--muted);font-family:var(--mono);font-size:10px;" transform="rotate(-90 12 ${padT+plotH/2})">${leftTitle}</text>${rightTitle}</svg>`;
 }
 function renderVO2(){
   const panel=document.getElementById('vo2Panel');
@@ -1060,34 +1128,6 @@ function renderVO2(){
   }
   panel.innerHTML=html;
 }
-function renderSportBench(){
-  const el=document.getElementById('sportBench');
-  const runs=state.entries.filter(e=>e.duration&&e.value>0);
-  let avgPace=null;
-  if(runs.length)avgPace=runs.reduce((a,e)=>a+e.duration,0)/runs.reduce((a,e)=>a+e.value,0);
-  const paceStr=avgPace?`${Math.floor(avgPace)}:${String(Math.round((avgPace%1)*60)).padStart(2,'0')}/km`:'—';
-  const row=(l,y,marks,max)=>{
-    let m='';marks.forEach(mk=>{m+=`<div class="bench-marker" style="left:${Math.min(mk.v/max,1)*100}%"><div class="mlabel">${mk.l}</div></div>`;});
-    return `<div class="bench-row"><div class="bench-top"><span class="bname">${l}</span><span class="bval">${y.text}</span></div>
-    <div class="bench-track"><div class="bench-fill" style="width:${Math.min(y.v/max,1)*100}%"></div>${m}</div></div>`;
-  };
-  let html='';
-  html+='<div class="sport-h">Rugby (pro forward standards)</div>';
-  html+=row('Squat',{v:state.prs.squat,text:state.prs.squat+'kg'},[{v:180,l:'Pro min 1.8×BW'},{v:325,l:'Elite 325kg'}],330);
-  html+=row('Bench',{v:state.prs.bench,text:state.prs.bench+'kg'},[{v:140,l:'Pro min ~1.4×BW'},{v:190,l:'Elite 190kg'}],210);
-  html+='<div class="sport-h">American Football (NFL lineman)</div>';
-  html+=row('Bench',{v:state.prs.bench,text:state.prs.bench+'kg'},[{v:204,l:'NFL lineman 204kg'},{v:250,l:'Top end 250kg'}],260);
-  html+='<div class="sport-h">Powerlifting (drug-free standards)</div>';
-  html+=row('Squat',{v:state.prs.squat,text:state.prs.squat+'kg'},[{v:200,l:'Elite 2×BW'},{v:250,l:'2.5×BW'}],260);
-  html+=row('Deadlift',{v:state.prs.deadlift,text:state.prs.deadlift+'kg'},[{v:240,l:'Advanced'},{v:295,l:'Elite'}],310);
-  html+='<div class="sport-h">Weightlifting-adjacent</div>';
-  html+=row('Clean',{v:state.prs.clean,text:state.prs.clean+'kg'},[{v:110,l:'Intermediate'},{v:177,l:'Elite'}],185);
-  html+='<div class="sport-h">Hyrox (elite race pace)</div>';
-  html+=`<div class="bench-row"><div class="bench-top"><span class="bname">Running pace</span><span class="bval">${paceStr}</span></div>
-  <div class="sub-note">Elite Hyrox racers hold roughly 3:51–4:50/km depending on the dataset. ${avgPace?(avgPace<=4.83?'You are inside the elite band on logged runs.':'Gap to the slower edge of elite: '+(avgPace-4.83).toFixed(2)+' min/km.'):'Log a run with minutes to compare.'}</div></div>`;
-  el.innerHTML=html;
-}
-
 function render(){
   document.getElementById('prSquat').value=state.prs.squat;
   document.getElementById('prFrontSquat').value=state.prs.frontSquat;
@@ -1096,6 +1136,14 @@ function render(){
   document.getElementById('prOhp').value=state.prs.ohp;
   document.getElementById('prClean').value=state.prs.clean;
   document.getElementById('bodyWeight').value=state.bodyweight||'';
+  const bl=(state.bodyweightLog||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById('bwHistNote').textContent=bl.length
+    ? ('Logged '+bl.length+' entr'+(bl.length>1?'ies':'y')+' · latest '+bl[bl.length-1].kg+'kg on '+bl[bl.length-1].date)
+    : 'Log your bodyweight over time to plot it against your e1RM.';
+  updateBackupBanner();
+  const bn=document.getElementById('backupNote');
+  if(bn)bn.innerHTML=(state.lastExport?('Last backed up '+state.lastExport+' ('+daysSinceExport()+' day'+(daysSinceExport()===1?'':'s')+' ago). '):'Not backed up yet. ')
+    +'<b>Export copy</b> downloads a separate dated file (to move devices or archive) — it doesn\'t touch your weekly backup. <b>Import</b> replaces your current log with a chosen file.';
   document.getElementById('goalRun').value=state.goals.runKm;
   document.getElementById('hrRest').value=state.hr.rest||'';
   document.getElementById('hrMax').value=state.hr.max||'';
@@ -1118,7 +1166,7 @@ function render(){
     return `<div class="muscle-row"><span class="mname">${MUSCLE_LABEL[m]}</span><span class="mstatus" style="color:${c}">${Math.round(musclePct(m,v))}%</span></div>`;
   }).join('');
 
-  renderE1RM();renderPercentiles();renderSportBench();renderVO2();renderMonthProgress();renderE1rmTrend();
+  renderE1RM();renderPercentiles();renderVO2();renderMonthProgress();renderE1rmTrend();
 
   const exList=document.getElementById('exList');
   const byDate={};
@@ -1175,9 +1223,9 @@ function updateDayRecall(){
   const day=document.getElementById('daySelect').value;
   const box=document.getElementById('dayRecall');
   const dayLabel={legs:'leg day',push:'push day',pull:'pull day',other:'session'}[day];
-  const tagged=state.exercises.filter(e=>e.day===day);
-  let pool=tagged;
-  if(pool.length===0)pool=state.exercises.filter(e=>exCat(e)===day);
+  const currentDate=document.getElementById('exDate').value;
+  let pool=state.exercises.filter(e=>e.day===day&&e.date!==currentDate);
+  if(pool.length===0)pool=state.exercises.filter(e=>exCat(e)===day&&e.date!==currentDate);
   if(pool.length===0){box.innerHTML=`No previous ${dayLabel} on record yet.`;box.classList.add('show');return;}
   const lastDate=pool.map(e=>e.date).sort().reverse()[0];
   const items=state.exercises.filter(e=>e.date===lastDate&&(e.day===day||(!e.day&&exCat(e)===day)));
@@ -1207,8 +1255,9 @@ function updateLastTime(){
   }
   box.innerHTML=html;box.classList.add('show');
 }
-document.getElementById('daySelect').addEventListener('change',()=>{populateExSelect();updateDayRecall();updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);});
-document.getElementById('exSelect').addEventListener('change',()=>{updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);});
+document.getElementById('daySelect').addEventListener('change',()=>{state.lastDay=document.getElementById('daySelect').value;populateExSelect();applyLastExercise();updateDayRecall();updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);save();});
+document.getElementById('exSelect').addEventListener('change',()=>{state.lastExercise=document.getElementById('exSelect').value;updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);save();});
+document.getElementById('exDate').addEventListener('change',()=>{updateDayRecall();});
 
 document.getElementById('addExBtn').addEventListener('click',async()=>{
   const sel=document.getElementById('exSelect');
@@ -1235,7 +1284,6 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
     const ck=prompt('Category — legs, push, pull, or core:','legs');
     name=cn;map={[found||'quads']:1.0};
     cat=['legs','push','pull','core'].includes((ck||'').toLowerCase())?(ck||'legs').toLowerCase():'legs';
-    // persist it so it stays in the dropdown next time
     if(!LIBRARY[name]){
       state.customExercises=state.customExercises||[];
       if(!state.customExercises.some(c=>c.name===name)){
@@ -1249,7 +1297,6 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
   clearSetRows();
   document.getElementById('exNote').value='';
   if(newCustom){registerCustomExercises();populateExSelect();
-    // re-select the day so the new exercise shows in the right group
     document.getElementById('exSelect').value=name;}
   const pbs=updatePBsFromLogs();
   await save();render();updateDayRecall();updateLastTime();
@@ -1290,6 +1337,17 @@ document.getElementById('bodyWeight').addEventListener('change',async(e)=>{
   state.bodyweight=Number(e.target.value)||100;
   await save();render();
 });
+document.getElementById('logBwBtn').addEventListener('click',async()=>{
+  const kg=Number(document.getElementById('bodyWeight').value);
+  const date=document.getElementById('bwDate').value||todayISO();
+  if(!kg||kg<=0){alert('Enter your bodyweight in kg first.');return;}
+  state.bodyweightLog=(state.bodyweightLog||[]).filter(b=>b.date!==date); // upsert by date
+  state.bodyweightLog.push({date,kg});
+  state.bodyweightLog.sort((a,b)=>a.date.localeCompare(b.date));
+  state.bodyweight=state.bodyweightLog[state.bodyweightLog.length-1].kg; // current = latest logged
+  await save();render();
+  document.getElementById('statusLine').textContent='bodyweight logged · '+kg+'kg on '+date;
+});
 document.getElementById('trendToggles').querySelectorAll('button').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.getElementById('trendToggles').querySelectorAll('button').forEach(b=>b.classList.remove('active'));
@@ -1299,17 +1357,45 @@ document.getElementById('trendToggles').querySelectorAll('button').forEach(btn=>
   });
 });
 
-document.getElementById('exportBtn').addEventListener('click',()=>{
-  const payload=JSON.stringify(state,null,2);
-  const blob=new Blob([payload],{type:'application/json'});
+function daysSinceExport(){
+  if(!state.lastExport)return Infinity;
+  return Math.floor((new Date(todayISO())-new Date(state.lastExport))/86400000);
+}
+function backupDue(){return daysSinceExport()>=7;}
+function updateBackupBanner(){
+  const b=document.getElementById('backupBanner');const t=document.getElementById('backupBannerText');
+  if(!b)return;
+  if(backupDue()){
+    b.style.display='flex';
+    t.textContent=state.lastExport
+      ? ('Weekly backup due — last saved '+daysSinceExport()+' day'+(daysSinceExport()===1?'':'s')+' ago')
+      : 'Back up your data to keep it safe';
+  } else {
+    b.style.display='none';
+  }
+}
+function downloadJSON(filename){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;
-  a.download='field-log-'+todayISO()+'.json';
+  a.href=url;a.download=filename;
   document.body.appendChild(a);a.click();a.remove();
   URL.revokeObjectURL(url);
-  document.getElementById('statusLine').textContent='data exported · '+todayISO();
-});
+}
+// Weekly safety backup: single fixed file, resets the reminder.
+async function backupNow(){
+  downloadJSON('pr-performance-backup.json');
+  state.lastExport=todayISO();
+  await save();updateBackupBanner();render();
+  document.getElementById('statusLine').textContent='backed up · '+todayISO()+' (choose Replace to keep one file)';
+}
+// One-off dated copy: does NOT reset the weekly reminder.
+function exportCopy(){
+  downloadJSON('pr-performance-'+todayISO()+'.json');
+  document.getElementById('statusLine').textContent='copy exported · pr-performance-'+todayISO()+'.json';
+}
+document.getElementById('exportBtn').addEventListener('click',exportCopy);
+document.getElementById('backupNowBtn').addEventListener('click',backupNow);
 document.getElementById('importBtn').addEventListener('click',()=>{
   document.getElementById('importFile').click();
 });
@@ -1332,7 +1418,7 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
       registerCustomExercises();updatePBsFromLogs();populateExSelect();
       await save();render();updateDayRecall();updateLastTime();
       prefillFromLast(document.getElementById('exSelect').value);
-      document.getElementById('statusLine').textContent='data imported · '+state.entries.length+' runs, '+state.exercises.length+' exercises';
+      document.getElementById('statusLine').textContent='data imported · '+state.entries.length+' runs, '+workoutCount()+' workouts';
     }catch(err){
       alert('Could not read that file — make sure it is a PR Performance export.');
     }
