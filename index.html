@@ -147,6 +147,14 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 .pct-fact{margin-top:60px;color:var(--good);font-size:11px;line-height:1.5;font-style:italic;}
 .sport-h{font-family:'Oswald','Arial Narrow',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--moss);margin:22px 0 12px 0;border-bottom:1px solid var(--line);padding-bottom:6px;}
 .sport-h:first-child{margin-top:0;}
+.trend-toggles{display:flex;gap:6px;margin-bottom:14px;}
+.trend-toggles button{flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--muted);font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:12px;padding:8px 0;border-radius:2px;cursor:pointer;letter-spacing:1px;}
+.trend-toggles button.active{background:var(--gold);color:#1c2321;font-weight:700;border-color:var(--gold);}
+.trend-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--muted);}
+.trend-legend .tl{display:flex;align-items:center;gap:6px;}
+.trend-legend .tl .sw{width:14px;height:3px;border-radius:2px;display:inline-block;}
+#e1rmTrend svg{width:100%;height:auto;display:block;}
+#e1rmTrend .empty{color:var(--muted);font-size:13px;padding:24px 0;text-align:center;}
 </style>
 </head>
 <body>
@@ -159,6 +167,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
   <div class="tabs">
     <div class="tab active" data-page="log">Gym</div>
     <div class="tab" data-page="running">Running</div>
+    <div class="tab" data-page="me">Me</div>
     <div class="tab" data-page="bench">Benchmarks</div>
   </div>
 
@@ -217,16 +226,6 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
       <div class="compass-legend" id="compassLegend"></div>
     </div>
 
-    <div class="card">
-      <h3>Personal Bests (kg)</h3>
-      <div class="pr-row"><label>Squat</label><input type="number" id="prSquat" step="0.5"></div>
-      <div class="pr-row"><label>Front Squat</label><input type="number" id="prFrontSquat" step="0.5"></div>
-      <div class="pr-row"><label>Deadlift</label><input type="number" id="prDeadlift" step="0.5"></div>
-      <div class="pr-row"><label>Bench</label><input type="number" id="prBench" step="0.5"></div>
-      <div class="pr-row"><label>Overhead Press</label><input type="number" id="prOhp" step="0.5"></div>
-      <div class="pr-row"><label>Clean</label><input type="number" id="prClean" step="0.5"></div>
-    </div>
-
     <div class="panel"><h3>Workout History <span class="hint">— grouped by day</span></h3><div class="log-list" id="exList"></div></div>
 
     <div class="panel">
@@ -244,6 +243,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
     <div class="panel">
       <h3>Monthly Distance <span class="hint">— km run this calendar month vs your goal</span></h3>
       <div id="monthProgress"></div>
+      <div class="pr-row" style="margin-top:12px;"><label>Run goal (km/mo)</label><input type="number" id="goalRun" step="1"></div>
     </div>
     <div class="panel">
       <h3>Log Run</h3>
@@ -256,14 +256,44 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
       </div>
       <button class="btn" id="addBtn">Add run</button>
     </div>
+    <div class="panel"><h3>Run Log</h3><div class="log-list" id="logList"></div></div>
+  </div>
+
+  <div class="page" id="page-me">
+    <div class="panel">
+      <h3>Profile <span class="hint">— your bodyweight tunes the strength percentiles &amp; bodyweight-exercise loads</span></h3>
+      <div class="pr-row"><label>Bodyweight (kg)</label><input type="number" id="bodyWeight" step="0.5"></div>
+    </div>
+    <div class="panel">
+      <h3>e1RM Trend <span class="hint">— estimated 1RM over time for the big three</span></h3>
+      <div class="trend-toggles" id="trendToggles">
+        <button type="button" data-months="1">1M</button>
+        <button type="button" data-months="3" class="active">3M</button>
+        <button type="button" data-months="6">6M</button>
+        <button type="button" data-months="12">1Y</button>
+      </div>
+      <div id="e1rmTrend"></div>
+      <div class="trend-legend">
+        <span class="tl"><span class="sw" style="background:var(--slate-blue)"></span>Squat</span>
+        <span class="tl"><span class="sw" style="background:var(--gold)"></span>Bench</span>
+        <span class="tl"><span class="sw" style="background:var(--moss)"></span>Deadlift</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Personal Bests (kg)</h3>
+      <div class="pr-row"><label>Squat</label><input type="number" id="prSquat" step="0.5"></div>
+      <div class="pr-row"><label>Front Squat</label><input type="number" id="prFrontSquat" step="0.5"></div>
+      <div class="pr-row"><label>Deadlift</label><input type="number" id="prDeadlift" step="0.5"></div>
+      <div class="pr-row"><label>Bench</label><input type="number" id="prBench" step="0.5"></div>
+      <div class="pr-row"><label>Overhead Press</label><input type="number" id="prOhp" step="0.5"></div>
+      <div class="pr-row"><label>Clean</label><input type="number" id="prClean" step="0.5"></div>
+    </div>
     <div class="panel">
       <h3>VO2max Estimate</h3>
       <div class="pr-row"><label>Resting HR</label><input type="number" id="hrRest" placeholder="bpm" step="1"></div>
       <div class="pr-row"><label>Max HR</label><input type="number" id="hrMax" placeholder="bpm" step="1"></div>
-      <div class="pr-row"><label>Run goal (km/mo)</label><input type="number" id="goalRun" step="1"></div>
       <div id="vo2Panel" style="margin-top:10px;"></div>
     </div>
-    <div class="panel"><h3>Run Log</h3><div class="log-list" id="logList"></div></div>
   </div>
 
   <div class="page" id="page-bench">
@@ -274,7 +304,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
     <div class="panel">
       <h3>Strength Percentiles <span class="hint">— gold pointer = your PB &amp; percentile · green pointer = latest e1RM · dashed lines = standard thresholds</span></h3>
       <div id="pctPanel"></div>
-      <div class="sub-note" style="margin-top:10px;">Percentiles compare against people who lift and log their numbers — a far stronger pool than the general public. Standards approximate published tables for a ~100kg male; Clean and Front Squat standards are rougher approximations than the big three.</div>
+      <div class="sub-note" style="margin-top:10px;">Percentiles compare against people who lift and log their numbers — a far stronger pool than the general public. Standards are published for a ~100kg male and scaled to your bodyweight (set on the Me tab) using allometric 2/3-power scaling. Clean and Front Squat standards are rougher approximations than the big three.</div>
     </div>
     <div class="panel">
       <h3>Elite Sport Benchmarks</h3>
@@ -288,7 +318,7 @@ body{background:var(--bg);color:var(--bone);font-family:'Inter',-apple-system,Bl
 
 <script>
 const DATA_KEY='field-log-data-v2';
-const BODYWEIGHT=100;
+function bodyWeightKg(){return state.bodyweight||100;}
 
 // Storage layer: localStorage first (works as an installed iPhone home-screen app),
 // falling back to window.storage so the in-Claude preview still saves.
@@ -307,6 +337,7 @@ const storage={
 };
 const defaultState={
   entries:[],exercises:[],customExercises:[],
+  bodyweight:100,
   prs:{squat:192.5,deadlift:225,bench:150,frontSquat:130,clean:120,ohp:80},
   goals:{runKm:100},
   hr:{rest:null,max:null}
@@ -528,10 +559,31 @@ function factFor(name,pb){
   return f;
 }
 
+// Raise PBs from ACTUAL logged reps only — the heaviest weight lifted for >=1 rep.
+// Never uses e1RM, and never lowers an existing PB. Returns any lifts that hit a new PB.
+function updatePBsFromLogs(){
+  const gained=[];
+  Object.keys(PR_MATCH).forEach(name=>{
+    const key=PR_MATCH[name];
+    let maxW=0;
+    state.exercises.filter(e=>e.name===name).forEach(ex=>{
+      normalizeSets(ex).forEach(s=>{
+        if((s.reps||0)>=1 && (s.weight||0)>maxW) maxW=s.weight||0;
+      });
+    });
+    if(maxW>(state.prs[key]||0)){ state.prs[key]=maxW; gained.push({name,kg:maxW}); }
+  });
+  return gained;
+}
+
 function e1rm(w,r){if(!w||!r)return 0;if(r===1)return w;
   const ep=w*(1+r/30);const br=r<37?w*36/(37-r):ep;return(ep+br)/2;}
+// Strength standards are published for a ~100kg male. Scale them to the user's bodyweight
+// using allometric (2/3-power) scaling: absolute strength rises with size, but not proportionally.
+function bwFactor(){return Math.pow((state.bodyweight||100)/100,2/3);}
+function standardsFor(n){const s=STANDARDS[n];if(!s)return null;const f=bwFactor();return s.map(v=>v*f);}
 function percentileFor(n,x){
-  const s=STANDARDS[n];if(!s)return null;
+  const s=standardsFor(n);if(!s)return null;
   if(x<=s[0])return Math.max(1,Math.round(5*x/s[0]));
   if(x>=s[4]){const o=Math.min((x-s[4])/(s[4]*0.15),1);return Math.round(95+o*4);}
   for(let i=0;i<4;i++){if(x<=s[i+1]){const f=(x-s[i])/(s[i+1]-s[i]);return Math.round(PCT_ANCHORS[i]+f*(PCT_ANCHORS[i+1]-PCT_ANCHORS[i]));}}
@@ -636,9 +688,9 @@ function normalizeSets(ex){
 function setLoad(ex,s){
   const lib=LIBRARY[ex.name];
   if(lib&&lib.bwAdd){
-    return BODYWEIGHT*(lib.bwF||1)+(s.weight||0);
+    return bodyWeightKg()*(lib.bwF||1)+(s.weight||0);
   }
-  return(lib&&lib.bw)?BODYWEIGHT*(lib.bwF||0.8):(s.weight||0);
+  return(lib&&lib.bw)?bodyWeightKg()*(lib.bwF||0.8):(s.weight||0);
 }
 function fmtSet(name,s,withRpe){
   const rpe=(withRpe&&s.rpe)?`@${s.rpe}`:'';
@@ -667,6 +719,7 @@ async function load(){
     st.textContent='log saved · '+state.entries.length+' runs, '+state.exercises.length+' exercises';
   }catch(e){st.textContent='starting a fresh log';}
   registerCustomExercises();
+  updatePBsFromLogs();
   populateExSelect();
   render();updateDayRecall();updateLastTime();toggleWeightInputs();
   prefillFromLast(document.getElementById('exSelect').value);
@@ -683,6 +736,7 @@ function monthRunKm(){
   return state.entries.filter(e=>currentMonthKey(e.date)===mk).reduce((a,e)=>a+(e.value||0),0);
 }
 function daysAgoISO(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+function monthsAgoISO(n){const d=new Date();d.setMonth(d.getMonth()-n);return d.toISOString().slice(0,10);}
 function inWindow(date,fromDaysAgo,toDaysAgo){
   return date<=daysAgoISO(fromDaysAgo)&&date>=daysAgoISO(toDaysAgo);
 }
@@ -872,7 +926,7 @@ function renderPercentiles(){
   let html='';
   const lifts=[['Squat',state.prs.squat],['Front Squat',state.prs.frontSquat],['Bench Press',state.prs.bench],['Deadlift',state.prs.deadlift],['Overhead Press',state.prs.ohp],['Clean',state.prs.clean]];
   lifts.forEach(([n,v])=>{
-    const p=percentileFor(n,v);const s=STANDARDS[n];
+    const p=percentileFor(n,v);const s=standardsFor(n);
     const recent=latestE1RM(n);
     const pbPos=Math.min(v/s[4],1)*100;
     const recentMarker=recent?`<div class="you-marker recent" style="left:${Math.min(recent.e/s[4],1)*100}%"><span class="ylabel">e1RM ${recent.e.toFixed(0)}kg</span><span class="arrow"></span></div>`:'';
@@ -882,9 +936,9 @@ function renderPercentiles(){
       <div class="bench-track"><div class="bench-fill" style="width:${pbPos}%"></div>
         <div class="you-marker pb" style="left:${pbPos}%"><span class="ylabel">PB ${v}kg · top ${100-p}%</span><span class="arrow"></span></div>
         ${recentMarker}
-        <div class="bench-marker std" style="left:${s[2]/s[4]*100}%"><div class="mlabel">Int ${s[2]}</div></div>
-        <div class="bench-marker std lvl2" style="left:${s[3]/s[4]*100}%"><div class="mlabel">Adv ${s[3]}</div></div>
-        <div class="bench-marker std" style="left:99%"><div class="mlabel">Elite ${s[4]}</div></div>
+        <div class="bench-marker std" style="left:${s[2]/s[4]*100}%"><div class="mlabel">Int ${Math.round(s[2])}</div></div>
+        <div class="bench-marker std lvl2" style="left:${s[3]/s[4]*100}%"><div class="mlabel">Adv ${Math.round(s[3])}</div></div>
+        <div class="bench-marker std" style="left:99%"><div class="mlabel">Elite ${Math.round(s[4])}</div></div>
       </div>
       <div class="pct-fact">${fact}</div></div>`;
   });
@@ -928,6 +982,64 @@ function renderMonthProgress(){
     '<span class="bval">'+km.toFixed(1)+' / '+goal+' km · '+Math.round(rawPct)+'%</span></div>'+
     '<div class="bench-track"><div class="bench-fill" style="width:'+barPct+'%"></div></div>'+
     footer;
+}
+
+let trendMonths=3;
+// Best e1RM per session date for a lift, within [sinceISO, today]
+function e1rmSeries(name,sinceISO){
+  const byDate={};
+  state.exercises.filter(e=>e.name===name&&e.date>=sinceISO).forEach(ex=>{
+    let best=0;
+    normalizeSets(ex).forEach(s=>{const v=e1rm(setLoad(ex,s),s.reps);if(v>best)best=v;});
+    if(best>0&&(!byDate[ex.date]||best>byDate[ex.date]))byDate[ex.date]=best;
+  });
+  return Object.keys(byDate).sort().map(d=>({t:new Date(d).getTime(),date:d,e:byDate[d]}));
+}
+function renderE1rmTrend(){
+  const host=document.getElementById('e1rmTrend');
+  if(!host)return;
+  const sinceISO=monthsAgoISO(trendMonths);
+  const defs=[['Squat','var(--slate-blue)'],['Bench Press','var(--gold)'],['Deadlift','var(--moss)']];
+  const series=defs.map(([n,c])=>({name:n,color:c,pts:e1rmSeries(n,sinceISO)}));
+  const total=series.reduce((a,s)=>a+s.pts.length,0);
+  if(total===0){host.innerHTML='<div class="empty">No logged squat, bench or deadlift sets in this window yet.</div>';return;}
+  const W=660,H=280,padL=46,padR=14,padT=14,padB=32;
+  const plotW=W-padL-padR,plotH=H-padT-padB;
+  const t1=new Date().getTime();
+  const t0=new Date(sinceISO).getTime();
+  const allE=series.flatMap(s=>s.pts.map(p=>p.e));
+  let minE=Math.min(...allE),maxE=Math.max(...allE);
+  if(minE===maxE){minE-=5;maxE+=5;}
+  const pad=(maxE-minE)*0.12;minE=Math.max(0,minE-pad);maxE=maxE+pad;
+  const xOf=t=>t1===t0?padL+plotW:padL+((t-t0)/(t1-t0))*plotW;
+  const yOf=e=>padT+plotH-((e-minE)/(maxE-minE))*plotH;
+  // y gridlines/labels
+  let grid='',ticks=4;
+  for(let i=0;i<=ticks;i++){
+    const e=minE+(maxE-minE)*i/ticks;const y=yOf(e);
+    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" style="stroke:var(--line);stroke-width:1"/>`;
+    grid+=`<text x="${padL-6}" y="${y+3}" text-anchor="end" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${Math.round(e)}</text>`;
+  }
+  // x labels: start / mid / end dates
+  const fmt=iso=>{const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});};
+  const midISO=new Date((t0+t1)/2).toISOString().slice(0,10);
+  const xlabels=`<text x="${padL}" y="${H-10}" text-anchor="start" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(sinceISO)}</text>
+  <text x="${padL+plotW/2}" y="${H-10}" text-anchor="middle" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(midISO)}</text>
+  <text x="${W-padR}" y="${H-10}" text-anchor="end" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${fmt(todayISO())}</text>`;
+  let lines='';
+  series.forEach(s=>{
+    if(s.pts.length===0)return;
+    if(s.pts.length===1){
+      const p=s.pts[0];
+      lines+=`<circle cx="${xOf(p.t)}" cy="${yOf(p.e)}" r="4" style="fill:${s.color}"/>`;
+    } else {
+      const poly=s.pts.map(p=>`${xOf(p.t).toFixed(1)},${yOf(p.e).toFixed(1)}`).join(' ');
+      lines+=`<polyline points="${poly}" style="fill:none;stroke:${s.color};stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round"/>`;
+      lines+=s.pts.map(p=>`<circle cx="${xOf(p.t)}" cy="${yOf(p.e)}" r="3" style="fill:${s.color}"/>`).join('');
+    }
+  });
+  host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${lines}${xlabels}
+    <text x="12" y="${padT+8}" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;" transform="rotate(-90 12 ${padT+plotH/2})">e1RM kg</text></svg>`;
 }
 function renderVO2(){
   const panel=document.getElementById('vo2Panel');
@@ -983,6 +1095,7 @@ function render(){
   document.getElementById('prBench').value=state.prs.bench;
   document.getElementById('prOhp').value=state.prs.ohp;
   document.getElementById('prClean').value=state.prs.clean;
+  document.getElementById('bodyWeight').value=state.bodyweight||'';
   document.getElementById('goalRun').value=state.goals.runKm;
   document.getElementById('hrRest').value=state.hr.rest||'';
   document.getElementById('hrMax').value=state.hr.max||'';
@@ -1005,7 +1118,7 @@ function render(){
     return `<div class="muscle-row"><span class="mname">${MUSCLE_LABEL[m]}</span><span class="mstatus" style="color:${c}">${Math.round(musclePct(m,v))}%</span></div>`;
   }).join('');
 
-  renderE1RM();renderPercentiles();renderSportBench();renderVO2();renderMonthProgress();
+  renderE1RM();renderPercentiles();renderSportBench();renderVO2();renderMonthProgress();renderE1rmTrend();
 
   const exList=document.getElementById('exList');
   const byDate={};
@@ -1138,7 +1251,11 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
   if(newCustom){registerCustomExercises();populateExSelect();
     // re-select the day so the new exercise shows in the right group
     document.getElementById('exSelect').value=name;}
+  const pbs=updatePBsFromLogs();
   await save();render();updateDayRecall();updateLastTime();
+  if(pbs.length){
+    document.getElementById('statusLine').textContent='New PB! '+pbs.map(x=>x.name+' '+x.kg+'kg').join(', ');
+  }
 });
 
 document.getElementById('addBtn').addEventListener('click',async()=>{
@@ -1168,6 +1285,18 @@ document.getElementById('addBtn').addEventListener('click',async()=>{
 document.getElementById('goalRun').addEventListener('change',async(e)=>{
   state.goals.runKm=Number(e.target.value)||0;
   await save();render();
+});
+document.getElementById('bodyWeight').addEventListener('change',async(e)=>{
+  state.bodyweight=Number(e.target.value)||100;
+  await save();render();
+});
+document.getElementById('trendToggles').querySelectorAll('button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.getElementById('trendToggles').querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    trendMonths=Number(btn.getAttribute('data-months'));
+    renderE1rmTrend();
+  });
 });
 
 document.getElementById('exportBtn').addEventListener('click',()=>{
@@ -1200,7 +1329,7 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
       state.exercises=p.exercises||[];
       state.customExercises=p.customExercises||[];
       state.entries=(p.entries||[]).filter(x=>x.type==='run');
-      registerCustomExercises();populateExSelect();
+      registerCustomExercises();updatePBsFromLogs();populateExSelect();
       await save();render();updateDayRecall();updateLastTime();
       prefillFromLast(document.getElementById('exSelect').value);
       document.getElementById('statusLine').textContent='data imported · '+state.entries.length+' runs, '+state.exercises.length+' exercises';
