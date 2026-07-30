@@ -102,6 +102,13 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
 .day-ex{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px;}
 .day-ex .dx-name{color:var(--gold);font-family:var(--mono);font-size:12px;}
 .day-ex .dx-sets{color:var(--bone);font-family:var(--mono);font-size:12px;flex:1;text-align:right;}
+.edit-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 4px;}
+.ex-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.5px;padding:1px 4px;border-radius:2px;margin-left:6px;vertical-align:middle;}
+.ex-badge.db{background:rgba(201,162,39,0.22);color:var(--gold);border:1px solid rgba(201,162,39,0.45);}
+.edit-btn:hover{color:var(--gold);}
+.edit-banner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel-2);border-left:3px solid var(--gold);border-radius:2px;padding:8px 12px;margin-bottom:12px;font-family:var(--mono);font-size:12px;color:var(--gold);}
+.edit-banner button{background:none;border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:2px;cursor:pointer;}
+.edit-banner button:hover{color:var(--bone);border-color:var(--muted);}
 .log-entry{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;gap:8px;}
 .log-entry:last-child{border-bottom:none;}
 .log-left{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
@@ -189,8 +196,12 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
   </div>
 
   <div class="page active" id="page-log">
-    <div class="panel">
+    <div class="panel" id="logExercisePanel">
       <h3>Log an Exercise <span class="hint">— pick your day, up to 5 sets, RPE per set</span></h3>
+      <div class="edit-banner" id="editBanner" style="display:none;">
+        <span id="editBannerText">Editing</span>
+        <button type="button" id="cancelEditBtn">Cancel</button>
+      </div>
       <div class="form-row">
         <select id="daySelect">
           <option value="legs">Leg day</option>
@@ -200,7 +211,6 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
         </select>
         <input type="date" id="exDate">
       </div>
-      <div class="last-time" id="dayRecall"></div>
       <div class="form-row">
         <select id="exSelect"></select>
       </div>
@@ -243,7 +253,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
       <div class="compass-legend" id="compassLegend"></div>
     </div>
 
-    <div class="panel"><h3>Workout History <span class="hint">— last 7 days</span></h3><div class="log-list" id="exList"></div></div>
+    <div class="panel"><h3>Workout History <span class="hint">— last 10 days</span></h3><div class="log-list" id="exList"></div></div>
 
     <div class="panel" id="backupSection">
       <h3>Backup <span class="hint">— iOS can clear web-app data if storage runs low. Keep a safe copy.</span></h3>
@@ -290,7 +300,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
       <div class="pr-row"><label>Front Squat</label><input type="number" id="prFrontSquat" step="0.5"></div>
       <div class="pr-row"><label>Deadlift</label><input type="number" id="prDeadlift" step="0.5"></div>
       <div class="pr-row"><label>Bench</label><input type="number" id="prBench" step="0.5"></div>
-      <div class="pr-row"><label>Overhead Press</label><input type="number" id="prOhp" step="0.5"></div>
+      <div class="pr-row"><label>Military Press</label><input type="number" id="prOhp" step="0.5"></div>
       <div class="pr-row"><label>Clean</label><input type="number" id="prClean" step="0.5"></div>
     </div>
 
@@ -359,42 +369,50 @@ const defaultState={
 let state=JSON.parse(JSON.stringify(defaultState));
 
 const LIBRARY={
-  'Squat':{cat:'legs',emg:true,map:{quads:0.38,glutes:0.30,hamstrings:0.12,lowerBack:0.15,abs:0.05}},
-  'Front Squat':{cat:'legs',emg:true,map:{quads:0.48,glutes:0.20,hamstrings:0.07,lowerBack:0.08,abs:0.12,traps:0.05}},
-  'Walking Lunges':{cat:'legs',db:true,uni:true,emg:true,map:{glutes:0.38,quads:0.32,hamstrings:0.18,calves:0.07,abs:0.05}},
-  'Bulgarian Split Squat':{cat:'legs',uni:true,emg:true,map:{glutes:0.40,quads:0.35,hamstrings:0.15,abs:0.10}},
-  'Romanian Deadlift':{cat:'legs',emg:true,map:{hamstrings:0.45,glutes:0.30,lowerBack:0.25}},
-  'Single Leg RDL':{cat:'legs',uni:true,emg:false,map:{hamstrings:0.45,glutes:0.35,lowerBack:0.10,abs:0.10}},
-  'Leg Press':{cat:'legs',emg:true,map:{quads:0.60,glutes:0.28,hamstrings:0.12}},
-  'Leg Curl':{cat:'legs',emg:true,map:{hamstrings:0.88,calves:0.12}},
-  'Leg Extension':{cat:'legs',emg:true,map:{quads:1.0}},
-  'Hip Thrust':{cat:'legs',emg:true,map:{glutes:0.68,hamstrings:0.22,lowerBack:0.10}},
-  'Calf Raise':{cat:'legs',emg:true,map:{calves:1.0}},
-  'Box Jumps':{cat:'legs',bw:true,bwF:0.9,emg:false,map:{quads:0.40,glutes:0.35,calves:0.25}},
-  'Pistol Squats':{cat:'legs',bw:true,bwF:0.95,uni:true,emg:false,map:{quads:0.45,glutes:0.35,hamstrings:0.10,abs:0.10}},
-  'Deadlift':{cat:'pull',emg:true,map:{lowerBack:0.27,glutes:0.23,hamstrings:0.18,traps:0.17,lats:0.15}},
-  'Clean':{cat:'pull',emg:false,map:{traps:0.25,glutes:0.20,hamstrings:0.20,quads:0.15,lowerBack:0.10,forearms:0.10}},
-  'Barbell Row':{cat:'pull',emg:true,map:{lats:0.38,traps:0.22,delts:0.15,biceps:0.15,lowerBack:0.10}},
-  'Pull-up':{cat:'pull',emg:true,bwAdd:true,bwF:0.95,map:{lats:0.48,biceps:0.27,delts:0.15,forearms:0.10}},
-  'Lat Pulldown':{cat:'pull',emg:true,map:{lats:0.55,biceps:0.25,delts:0.10,forearms:0.10}},
-  'Face Pull':{cat:'pull',emg:false,map:{delts:0.70,traps:0.30}},
-  'Rear Delt Fly':{cat:'pull',db:true,emg:false,map:{delts:0.80,traps:0.20}},
-  'Bicep Curl':{cat:'pull',emg:true,map:{biceps:0.88,forearms:0.12}},
-  'Hammer Curl':{cat:'pull',db:true,emg:true,map:{biceps:0.58,forearms:0.42}},
-  'Bench Press':{cat:'push',emg:true,map:{chest:0.50,delts:0.25,triceps:0.25}},
-  'Incline Bench Press':{cat:'push',db:true,emg:true,map:{chest:0.45,delts:0.35,triceps:0.20}},
-  'Dip':{cat:'push',emg:true,bwAdd:true,bwF:0.9,map:{chest:0.42,triceps:0.38,delts:0.20}},
-  'Push-up':{cat:'push',bw:true,bwF:0.64,emg:true,map:{chest:0.50,delts:0.25,triceps:0.25}},
-  'Cable Fly':{cat:'push',emg:true,map:{chest:0.88,delts:0.12}},
-  'Overhead Press':{cat:'push',emg:true,map:{delts:0.70,triceps:0.22,traps:0.08}},
-  'Arnold Press':{cat:'push',db:true,emg:false,map:{delts:0.84,triceps:0.16}},
-  'Lateral Raise':{cat:'push',db:true,emg:true,map:{delts:0.88,traps:0.12}},
-  'Tricep Pushdown':{cat:'push',emg:true,map:{triceps:1.0}},
-  'Skull Crusher':{cat:'push',emg:true,map:{triceps:1.0}},
-  'Hanging Leg Raise':{cat:'core',emg:true,map:{abs:0.88,forearms:0.12}},
-  'Cable Crunch':{cat:'core',emg:true,map:{abs:1.0}},
-  'Ab Rollout':{cat:'core',bw:true,bwF:0.5,emg:true,map:{abs:0.72,lats:0.14,delts:0.14}},
-  'Banded Rotations':{cat:'core',bw:true,bwF:0.2,emg:false,map:{abs:0.90,delts:0.10}},
+  // Muscle splits are approximate models of how one set's work distributes, not measured values.
+  // They follow conventional/directional understanding of each lift; they are not derived from
+  // specific published studies. Tune them empirically against your own training.
+  // --- legs ---
+  'Box Jumps':{cat:'legs',bw:true,bwF:0.9,map:{glutes:0.35,quads:0.4,calves:0.25}},
+  'Bulgarian Split Squat':{cat:'legs',uni:true,map:{abs:0.1,glutes:0.4,quads:0.35,hamstrings:0.15}},
+  'Calf Raise':{cat:'legs',map:{calves:1}},
+  'Front Squat':{cat:'legs',map:{abs:0.15,lowerBack:0.1,glutes:0.2,quads:0.48,hamstrings:0.07}},
+  'Hip Thrust':{cat:'legs',map:{lowerBack:0.1,glutes:0.68,hamstrings:0.22}},
+  'Leg Curl':{cat:'legs',map:{hamstrings:0.88,calves:0.12}},
+  'Leg Extension':{cat:'legs',map:{quads:1}},
+  'Leg Press':{cat:'legs',map:{glutes:0.28,quads:0.6,hamstrings:0.12}},
+  'Pistol Squats':{cat:'legs',bw:true,bwF:0.95,uni:true,map:{abs:0.1,glutes:0.35,quads:0.45,hamstrings:0.1}},
+  'Romanian Deadlift':{cat:'legs',map:{abs:0.1,lowerBack:0.2,glutes:0.25,hamstrings:0.45}},
+  'Single Leg RDL':{cat:'legs',uni:true,map:{abs:0.1,lowerBack:0.1,glutes:0.35,hamstrings:0.45}},
+  'Squat':{cat:'legs',map:{abs:0.1,lowerBack:0.15,glutes:0.35,quads:0.3,hamstrings:0.1}},
+  'Walking Lunges':{cat:'legs',db:true,uni:true,map:{abs:0.05,glutes:0.38,quads:0.32,hamstrings:0.18,calves:0.07}},
+  // --- push ---
+  'Arnold Press':{cat:'push',db:true,map:{delts:0.84,triceps:0.16}},
+  'Bench Press':{cat:'push',map:{chest:0.5,delts:0.25,triceps:0.25}},
+  'Cable Fly':{cat:'push',map:{chest:0.88,delts:0.12}},
+  'Cable Tricep Pushdown':{cat:'push',map:{triceps:1}},
+  'Bench Press (DB)':{cat:'push',db:true,map:{chest:0.5,delts:0.25,triceps:0.25}},
+  'Fly (DB)':{cat:'push',db:true,map:{chest:0.88,delts:0.12}},
+  'Dip':{cat:'push',bwAdd:true,bwF:0.9,map:{chest:0.42,delts:0.2,triceps:0.38}},
+  'Incline Bench Press':{cat:'push',db:true,map:{chest:0.45,delts:0.35,triceps:0.2}},
+  'Lateral Raise':{cat:'push',db:true,map:{delts:0.88,traps:0.12}},
+  'Military Press':{cat:'push',map:{delts:0.7,triceps:0.22,traps:0.08}},
+  'Push-up':{cat:'push',bw:true,bwF:0.64,map:{chest:0.5,delts:0.25,triceps:0.25}},
+  'Skull Crusher':{cat:'push',map:{triceps:1}},
+  // --- pull ---
+  'Barbell Row':{cat:'pull',map:{delts:0.1,biceps:0.15,lats:0.4,traps:0.22,lowerBack:0.13}},
+  'Bicep Curl':{cat:'pull',db:true,map:{biceps:0.88,forearms:0.12}},
+  'Clean':{cat:'pull',map:{forearms:0.1,abs:0.15,traps:0.15,lowerBack:0.15,glutes:0.15,quads:0.15,hamstrings:0.15}},
+  'Deadlift':{cat:'pull',map:{forearms:0.05,abs:0.08,lats:0.12,traps:0.15,lowerBack:0.25,glutes:0.2,hamstrings:0.15}},
+  'Face Pull':{cat:'pull',map:{delts:0.6,biceps:0.05,forearms:0.05,traps:0.3}},
+  'Hammer Curl':{cat:'pull',db:true,map:{biceps:0.6,forearms:0.4}},
+  'Lat Pulldown':{cat:'pull',map:{delts:0.1,biceps:0.25,forearms:0.1,lats:0.55}},
+  'Pull-up':{cat:'pull',bwAdd:true,bwF:0.95,map:{delts:0.1,biceps:0.27,forearms:0.15,lats:0.48}},
+  'Rear Delt Fly':{cat:'pull',db:true,map:{delts:0.8,traps:0.2}},
+  // --- core ---
+  'Ab Rollout':{cat:'core',bw:true,bwF:0.5,map:{delts:0.14,abs:0.72,lats:0.14}},
+  'Banded Rotations':{cat:'core',bw:true,bwF:0.2,map:{delts:0.1,abs:0.9}},
+  'Toes to Bar':{cat:'core',bw:true,bwF:0.7,map:{forearms:0.15,abs:0.85}},
 };
 function registerCustomExercises(){
   (state.customExercises||[]).forEach(c=>{
@@ -418,13 +436,13 @@ const STANDARDS={
   'Front Squat':[66,95,128,167,208],
   'Bench Press':[66,93,126,163,202],
   'Deadlift':[104,143,189,240,295],
-  'Overhead Press':[43,61,84,111,140],
+  'Military Press':[43,61,84,111,140],
   'Clean':[60,82,110,142,177],
   'Barbell Row':[58,80,107,138,171],
 };
 const PCT_ANCHORS=[5,20,50,80,95];
-const MAIN_LIFTS=['Squat','Front Squat','Bench Press','Deadlift','Overhead Press','Clean'];
-const PR_MATCH={'Squat':'squat','Front Squat':'frontSquat','Bench Press':'bench','Deadlift':'deadlift','Overhead Press':'ohp','Clean':'clean'};
+const MAIN_LIFTS=['Squat','Front Squat','Bench Press','Deadlift','Military Press','Clean'];
+const PR_MATCH={'Squat':'squat','Front Squat':'frontSquat','Bench Press':'bench','Deadlift':'deadlift','Military Press':'ohp','Clean':'clean'};
 
 const FACTS={
   'Squat':[
@@ -528,7 +546,7 @@ const FACTS={
     {kg:500,fact:"500kg off the floor is half a tonne — a feat only a handful of humans in history have ever managed."},
     {kg:510,fact:"510kg would tie Hafthor Bjornsson's 2025 world record: the heaviest deadlift ever pulled."}
   ],
-  'Overhead Press':[
+  'Military Press':[
     {kg:30,fact:"30kg locked out overhead is about the weight of a large sack of potatoes."},
     {kg:40,fact:"40kg locked out overhead is about the weight of a full bag of cement."},
     {kg:50,fact:"50kg locked out overhead is about the weight of a three-seater sofa."},
@@ -642,6 +660,50 @@ function clearSetRows(){
     document.getElementById('setRow'+i).classList.remove('set-hidden');
   }
 }
+// --- Edit mode: load a saved exercise back into the form ---
+let editingId=null;
+function setEditUI(on,name){
+  document.getElementById('addExBtn').textContent=on?'Update exercise':'Save exercise';
+  const banner=document.getElementById('editBanner');
+  banner.style.display=on?'flex':'none';
+  if(on)document.getElementById('editBannerText').textContent='Editing: '+name;
+}
+function cancelEdit(){
+  editingId=null;
+  setEditUI(false);
+  clearSetRows();
+  document.getElementById('exNote').value='';
+  prefillFromLast(document.getElementById('exSelect').value);
+}
+function loadExerciseForEdit(id){
+  const ex=state.exercises.find(e=>e.id===id);
+  if(!ex)return;
+  editingId=id;
+  if(ex.day)document.getElementById('daySelect').value=ex.day;
+  showAllExercises=false;
+  populateExSelect();
+  const sel=document.getElementById('exSelect');
+  if(![...sel.options].some(o=>o.value===ex.name)){
+    showAllExercises=true;               // exercise sits outside this day's list — reveal all
+    populateExSelect();
+  }
+  document.getElementById('exDate').value=ex.date;
+  if([...sel.options].some(o=>o.value===ex.name))sel.value=ex.name;
+  toggleWeightInputs();
+  clearSetRows();
+  const sets=normalizeSets(ex);
+  for(let i=1;i<=5;i++){
+    const s=sets[i-1];
+    if(!s)continue;
+    document.getElementById('reps'+i).value=s.reps||'';
+    if(!isBW(ex.name))document.getElementById('wt'+i).value=s.weight||'';
+    document.getElementById('rpe'+i).value=(s.rpe!==undefined&&s.rpe!==null)?s.rpe:'';
+  }
+  document.getElementById('exNote').value=ex.note||'';
+  setEditUI(true,ex.name);
+  updateLastTime();
+  document.getElementById('logExercisePanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function prefillFromLast(name){
   clearSetRows();
   if(name==='Custom exercise…')return;
@@ -651,14 +713,20 @@ function prefillFromLast(name){
   const bw=isBW(name);
   for(let i=1;i<=5;i++){
     const s=sets[i-1];
-    if(s&&!bw&&s.weight){document.getElementById('wt'+i).value=s.weight;}
+    if(!s)continue;
+    if(!bw&&s.weight){document.getElementById('wt'+i).value=s.weight;}
+    if(s.reps){document.getElementById('reps'+i).value=s.reps;}
   }
 }
 
 // Dumbbell movements: weight is entered PER DUMBBELL, so true load is doubled.
 // Flagged in the library, or auto-detected from a standalone "DB" / "dumbbell" in the name.
 // \b prevents false positives like "Deadbug".
-const DB_TAG=' 🏋️';
+const DB_TAG=' DB';
+const DB_BADGE='<span class="ex-badge db">DB</span>';
+// Only show the DB marker when the name doesn't already spell it out (e.g. "Bench Press (DB)")
+function dbTagFor(name){return (isDB(name)&&!/\bdb\b/i.test(name))?DB_TAG:'';}
+function dbBadgeFor(name){return (isDB(name)&&!/\bdb\b/i.test(name))?DB_BADGE:'';}
 const UNI_TAG=' ⇄';
 function isDB(name){
   if(LIBRARY[name]&&LIBRARY[name].db)return true;
@@ -674,19 +742,36 @@ function isUni(name){
 function volReps(ex,s){
   return (s.reps||0)*(isUni(ex.name)?2:1);
 }
+let showAllExercises=false;
+const SHOW_ALL_OPT='__showall__';
 function populateExSelect(){
   const sel=document.getElementById('exSelect');
   sel.innerHTML='';
   const day=document.getElementById('daySelect').value;
   const buckets={legs:[],push:[],pull:[],core:[]};
   Object.keys(LIBRARY).forEach(n=>buckets[LIBRARY[n].cat].push(n));
-  let order=[['legs','Legs'],['push','Push'],['pull','Pull'],['core','Core']];
-  if(day!=='other') order.sort((a,b)=>(a[0]===day?-1:0)-(b[0]===day?-1:0));
-  order.forEach(([k,label])=>{
+  const LABELS={legs:'Legs',push:'Push',pull:'Pull',core:'Core'};
+  const addGroup=(k,label)=>{
+    if(!buckets[k]||buckets[k].length===0)return;
     const og=document.createElement('optgroup');og.label=label;
-    buckets[k].forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n+(isDB(n)?DB_TAG:'')+(isUni(n)?UNI_TAG:'');og.appendChild(o);});
+    buckets[k].slice().sort().forEach(n=>{
+      const o=document.createElement('option');o.value=n;
+      o.textContent=n+dbTagFor(n)+(isUni(n)?UNI_TAG:'');
+      og.appendChild(o);
+    });
     sel.appendChild(og);
-  });
+  };
+  // Focused view: just this day's exercises, with an expander for everything else.
+  if(day!=='other'&&!showAllExercises){
+    addGroup(day,LABELS[day]);
+    const og=document.createElement('optgroup');og.label='—';
+    const o=document.createElement('option');o.value=SHOW_ALL_OPT;o.textContent='▸ Other exercises…';
+    og.appendChild(o);sel.appendChild(og);
+  } else {
+    let order=[['legs','Legs'],['push','Push'],['pull','Pull'],['core','Core']];
+    if(day!=='other')order.sort((a,b)=>(a[0]===day?-1:0)-(b[0]===day?-1:0));
+    order.forEach(([k,label])=>addGroup(k,label));
+  }
   const og=document.createElement('optgroup');og.label='Custom';
   const o=document.createElement('option');o.value='Custom exercise…';o.textContent='Custom exercise…';
   og.appendChild(o);sel.appendChild(og);
@@ -762,7 +847,7 @@ async function load(){
   if(state.lastDay)document.getElementById('daySelect').value=state.lastDay;
   populateExSelect();
   applyLastExercise();
-  render();updateDayRecall();updateLastTime();toggleWeightInputs();
+  render();updateLastTime();toggleWeightInputs();
   prefillFromLast(document.getElementById('exSelect').value);
 }
 async function save(){
@@ -1131,9 +1216,9 @@ function render(){
   const exList=document.getElementById('exList');
   const byDate={};
   state.exercises.forEach(ex=>{ (byDate[ex.date]=byDate[ex.date]||[]).push(ex); });
-  const weekAgo=daysAgoISO(6);
-  const dates=Object.keys(byDate).filter(d=>d>=weekAgo).sort((a,b)=>b.localeCompare(a));
-  if(dates.length===0){exList.innerHTML='<div class="empty">No sessions logged in the last 7 days.</div>';}
+  const since=daysAgoISO(9);
+  const dates=Object.keys(byDate).filter(d=>d>=since).sort((a,b)=>b.localeCompare(a));
+  if(dates.length===0){exList.innerHTML='<div class="empty">No sessions logged in the last 10 days.</div>';}
   else{
     exList.innerHTML=dates.map(date=>{
       const items=byDate[date].sort((a,b)=>a.id-b.id);
@@ -1141,7 +1226,7 @@ function render(){
       const dayLabel=day?{legs:'Leg day',push:'Push day',pull:'Pull day',other:'Other'}[day]:'';
       const rows=items.map(ex=>{
         const sets=normalizeSets(ex).map(s=>fmtSet(ex.name,s,true)).join(', ');
-        return `<div class="day-ex"><span class="dx-name">${escapeHtml(ex.name)}${isDB(ex.name)?DB_TAG:''}${isUni(ex.name)?UNI_TAG:''}</span><span class="dx-sets">${sets}</span><button class="del-btn" data-exid="${ex.id}" title="delete">×</button></div>`;
+        return `<div class="day-ex"><span class="dx-name">${escapeHtml(ex.name)}${dbBadgeFor(ex.name)}${isUni(ex.name)?UNI_TAG:''}</span><span class="dx-sets">${sets}</span><button class="edit-btn" data-editid="${ex.id}" title="edit">✎</button><button class="del-btn" data-exid="${ex.id}" title="delete">×</button></div>`;
       }).join('');
       return `<div class="day-card">
         <div class="day-head"><div class="dh-left"><span class="dh-date">${date}</span>${day?`<span class="day-tag ${day}">${dayLabel}</span>`:''}</div></div>
@@ -1150,8 +1235,14 @@ function render(){
     exList.querySelectorAll('.del-btn').forEach(btn=>{
       btn.addEventListener('click',async()=>{
         const id=Number(btn.getAttribute('data-exid'));
+        if(editingId===id)cancelEdit();
         state.exercises=state.exercises.filter(e=>e.id!==id);
-        await save();render();updateDayRecall();updateLastTime();
+        await save();render();updateLastTime();
+      });
+    });
+    exList.querySelectorAll('.edit-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        loadExerciseForEdit(Number(btn.getAttribute('data-editid')));
       });
     });
   }
@@ -1159,23 +1250,6 @@ function render(){
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-function updateDayRecall(){
-  const day=document.getElementById('daySelect').value;
-  const box=document.getElementById('dayRecall');
-  const dayLabel={legs:'leg day',push:'push day',pull:'pull day',other:'session'}[day];
-  const currentDate=document.getElementById('exDate').value;
-  let pool=state.exercises.filter(e=>e.day===day&&e.date!==currentDate);
-  if(pool.length===0)pool=state.exercises.filter(e=>exCat(e)===day&&e.date!==currentDate);
-  if(pool.length===0){box.innerHTML=`No previous ${dayLabel} on record yet.`;box.classList.add('show');return;}
-  const lastDate=pool.map(e=>e.date).sort().reverse()[0];
-  const items=state.exercises.filter(e=>e.date===lastDate&&(e.day===day||(!e.day&&exCat(e)===day)));
-  const lines=items.map(ex=>{
-    const sets=normalizeSets(ex).map(s=>fmtSet(ex.name,s,false)).join(', ');
-    return `${escapeHtml(ex.name)}: <b>${sets}</b>`;
-  }).join('<br>');
-  box.innerHTML=`Last ${dayLabel} (${lastDate}):<br>${lines}`;
-  box.classList.add('show');
-}
 function updateLastTime(){
   const name=document.getElementById('exSelect').value;
   const box=document.getElementById('lastTime');
@@ -1195,9 +1269,27 @@ function updateLastTime(){
   }
   box.innerHTML=html;box.classList.add('show');
 }
-document.getElementById('daySelect').addEventListener('change',()=>{state.lastDay=document.getElementById('daySelect').value;populateExSelect();applyLastExercise();updateDayRecall();updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);save();});
-document.getElementById('exSelect').addEventListener('change',()=>{state.lastExercise=document.getElementById('exSelect').value;updateLastTime();toggleWeightInputs();prefillFromLast(document.getElementById('exSelect').value);save();});
-document.getElementById('exDate').addEventListener('change',()=>{updateDayRecall();});
+document.getElementById('daySelect').addEventListener('change',()=>{
+  if(editingId!==null){editingId=null;setEditUI(false);}
+  showAllExercises=false;                    // collapse back to the new day's own list
+  state.lastDay=document.getElementById('daySelect').value;
+  populateExSelect();applyLastExercise();updateLastTime();toggleWeightInputs();
+  prefillFromLast(document.getElementById('exSelect').value);save();
+});
+document.getElementById('exSelect').addEventListener('change',()=>{
+  const sel=document.getElementById('exSelect');
+  if(sel.value===SHOW_ALL_OPT){             // expander: reveal every category
+    showAllExercises=true;
+    populateExSelect();
+    if(state.lastExercise&&[...sel.options].some(o=>o.value===state.lastExercise))sel.value=state.lastExercise;
+    updateLastTime();toggleWeightInputs();prefillFromLast(sel.value);
+    return;
+  }
+  if(editingId!==null){editingId=null;setEditUI(false);}
+  state.lastExercise=sel.value;
+  updateLastTime();toggleWeightInputs();prefillFromLast(sel.value);save();
+});
+document.getElementById('cancelEditBtn').addEventListener('click',cancelEdit);
 
 // Populate the muscle dropdown once, then drive the modal via a promise
 (function initCustomModal(){
@@ -1269,13 +1361,20 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
     }
   }
   if(setsArr.length===0){alert('Enter at least one set (reps required).');return;}
-  state.exercises.push({id:Date.now(),name,date,day,setsArr,note,map,cat});
+  if(editingId!==null){
+    const idx=state.exercises.findIndex(e=>e.id===editingId);
+    if(idx>=0)state.exercises[idx]={...state.exercises[idx],name,date,day,setsArr,note,map,cat};
+    editingId=null;
+    setEditUI(false);
+  } else {
+    state.exercises.push({id:Date.now(),name,date,day,setsArr,note,map,cat});
+  }
   clearSetRows();
   document.getElementById('exNote').value='';
   if(newCustom){registerCustomExercises();populateExSelect();
     document.getElementById('exSelect').value=name;}
   const pbs=updatePBsFromLogs();
-  await save();render();updateDayRecall();updateLastTime();
+  await save();render();updateLastTime();
   if(pbs.length){
     document.getElementById('statusLine').textContent='New PB! '+pbs.map(x=>x.name+' '+x.kg+'kg').join(', ');
   }
@@ -1367,7 +1466,7 @@ document.getElementById('importFile').addEventListener('change',(e)=>{
       state.exercises=p.exercises||[];
       state.customExercises=p.customExercises||[];
       registerCustomExercises();updatePBsFromLogs();populateExSelect();
-      await save();render();updateDayRecall();updateLastTime();
+      await save();render();updateLastTime();
       prefillFromLast(document.getElementById('exSelect').value);
       document.getElementById('statusLine').textContent='data imported · '+workoutCount()+' workouts';
     }catch(err){
