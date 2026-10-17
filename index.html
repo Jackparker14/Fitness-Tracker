@@ -87,6 +87,8 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
 .set-row .set-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;width:24px;flex-shrink:0;padding:0;}
 .set-row .set-del:hover{color:var(--danger);}
 .set-row.set-hidden{display:none;}
+.add-set-btn{margin-top:8px;background:none;border:1px dashed var(--line);color:var(--muted);font-family:var(--mono);font-size:11px;padding:7px 12px;border-radius:2px;cursor:pointer;width:100%;}
+.add-set-btn:hover{color:var(--bone);border-color:var(--muted);}
 .btn{background:var(--gold);color:#1c2321;border:none;font-family:var(--head);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;font-size:13px;padding:10px 18px;border-radius:2px;cursor:pointer;}
 .btn:hover{background:#dbb536;}
 .log-list{display:flex;flex-direction:column;}
@@ -94,6 +96,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
 .day-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--mono);font-size:12px;}
 .day-head .dh-left{display:flex;gap:10px;align-items:center;}
 .day-head .dh-date{color:var(--bone);font-weight:700;}
+.day-head .dh-sub{color:var(--muted);font-size:10px;}
 .day-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;}
 .day-tag.legs{background:rgba(122,143,166,0.22);color:var(--slate-blue);}
 .day-tag.push{background:rgba(201,162,39,0.2);color:var(--gold);}
@@ -130,10 +133,12 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
 .mannequin-legend{flex:1;min-width:220px;}
 .mkey{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px;}
 .mkey span.sw{width:10px;height:10px;border-radius:2px;display:inline-block;}
-.muscle-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;}
-.muscle-row:last-child{border-bottom:none;}
-.muscle-row .mname{color:var(--bone);}
-.muscle-row .mstatus{font-weight:700;}
+#muscleList{display:grid;grid-template-columns:1fr 1fr;column-gap:18px;}
+.muscle-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;}
+.muscle-row .mname{color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.muscle-row .mtrend{text-align:right;font-size:10px;}
+.muscle-row .mstatus{font-weight:700;text-align:right;min-width:34px;}
+@media(max-width:460px){#muscleList{grid-template-columns:1fr;}}
 .big-1rm{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
 .big-1rm .num{font-family:var(--head);font-size:42px;font-weight:700;color:var(--gold);line-height:1;}
 .big-1rm .lbl{font-family:var(--mono);font-size:12px;color:var(--muted);}
@@ -168,6 +173,14 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
 .modal h3{font-family:var(--head);font-size:15px;text-transform:uppercase;letter-spacing:1px;margin:0 0 16px 0;color:var(--bone);}
 .mlabel-f{display:block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:5px;}
 .modal input,.modal select{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:var(--body);font-size:15px;padding:10px;border-radius:2px;margin-bottom:14px;}
+.cx-muscle-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-bottom:8px;}
+.cx-mrow{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.cx-mrow label{font-family:var(--mono);font-size:11px;color:var(--bone);}
+.cx-mrow input{width:52px;background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:var(--mono);font-size:13px;padding:5px 6px;border-radius:2px;text-align:right;margin-bottom:0;}
+.cx-total{float:right;font-family:var(--mono);font-weight:700;}
+.cx-total.ok{color:var(--good);}
+.cx-total.bad{color:var(--danger);}
+.cx-hint{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.4;}
 .modal-btns{display:flex;gap:10px;margin-top:4px;}
 .modal-btns .btn{flex:1;}
 .trend-toggles{display:flex;gap:6px;margin-bottom:14px;}
@@ -219,6 +232,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
         <div class="sets-block">
           <div class="set-head"><span class="setnum"></span><span class="wtHead">kg</span><span class="repHead">reps</span><span>RPE</span><span class="delHead"></span></div>
           <div class="set-grid" id="setGrid"></div>
+          <button type="button" id="addSetBtn" class="add-set-btn">+ Add set</button>
         </div>
         <div class="rpe-key">
           <div class="rpe-key-title">RPE</div>
@@ -236,7 +250,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
     </div>
 
     <div class="panel">
-      <h3>Muscle Map <span class="hint">— trailing 7 days · % of maximum muscle volume</span></h3>
+      <h3>Muscle Map <span class="hint">— trailing 7 days · sorted by most trained · vs 4-wk avg · % of max volume</span></h3>
       <div class="mannequin-wrap">
         <svg id="mannequinSvg" width="300" height="420" viewBox="0 0 340 440"></svg>
         <div class="mannequin-legend">
@@ -279,7 +293,7 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
       <div class="sub-note" id="bwHistNote" style="margin-top:8px;"></div>
     </div>
     <div class="panel">
-      <h3>e1RM Trend <span class="hint">— estimated 1RM over time for the big three</span></h3>
+      <h3>e1RM Trend <span class="hint">— best e1RM of last 3 sessions · axis zoomed to your range</span></h3>
       <div class="trend-toggles" id="trendToggles">
         <button type="button" data-months="1">1M</button>
         <button type="button" data-months="3" class="active">3M</button>
@@ -330,8 +344,9 @@ body{background:var(--bg);color:var(--bone);font-family:var(--body);min-height:1
         <option value="pull">Pull</option>
         <option value="core">Core</option>
       </select>
-      <label class="mlabel-f">Primary muscle</label>
-      <select id="cxMuscle"></select>
+      <label class="mlabel-f">Muscle split — enter % for each muscle worked <span id="cxTotal" class="cx-total">0%</span></label>
+      <div id="cxMuscleGrid" class="cx-muscle-grid"></div>
+      <div class="cx-hint">Leave muscles blank if not worked. Must total 100%. Tip: fill the main mover first (e.g. 60) and spread the rest.</div>
       <div class="modal-btns">
         <button class="btn" id="cxCancel" style="background:var(--panel-2);color:var(--bone);border:1px solid var(--line);">Cancel</button>
         <button class="btn" id="cxSave">Add exercise</button>
@@ -632,10 +647,17 @@ document.querySelectorAll('.tab').forEach(t=>{
   });
 });
 
+const MAX_SETS=8;       // up to 8 rows exist; 5 show by default, + reveals the rest
+const BASE_SETS=5;
+let visibleSets=BASE_SETS;
+function updateAddSetBtn(){
+  const btn=document.getElementById('addSetBtn');
+  if(btn)btn.style.display=visibleSets>=MAX_SETS?'none':'';
+}
 (function buildSetRows(){
   let html='';
-  for(let i=1;i<=5;i++){
-    html+=`<div class="set-row" id="setRow${i}"><span class="setnum">Set ${i}</span>
+  for(let i=1;i<=MAX_SETS;i++){
+    html+=`<div class="set-row${i>BASE_SETS?' set-hidden':''}" id="setRow${i}"><span class="setnum">Set ${i}</span>
       <input type="number" step="0.5" placeholder="kg" id="wt${i}" class="wtInput">
       <input type="number" min="1" placeholder="reps" id="reps${i}" class="repInput">
       <input type="number" min="1" max="10" step="0.5" placeholder="RPE" id="rpe${i}">
@@ -644,21 +666,40 @@ document.querySelectorAll('.tab').forEach(t=>{
   document.getElementById('setGrid').innerHTML=html;
   document.getElementById('setGrid').querySelectorAll('.set-del').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      const i=btn.getAttribute('data-set');
+      const i=Number(btn.getAttribute('data-set'));
       document.getElementById('reps'+i).value='';
       document.getElementById('wt'+i).value='';
       document.getElementById('rpe'+i).value='';
-      document.getElementById('setRow'+i).classList.add('set-hidden');
+      // Hiding a row only makes sense for the extra (>5) rows; for 1-5 just clear it.
+      if(i>BASE_SETS){
+        document.getElementById('setRow'+i).classList.add('set-hidden');
+        visibleSets=Math.max(BASE_SETS,visibleSets-1);
+        updateAddSetBtn();
+      }
     });
+  });
+  document.getElementById('addSetBtn').addEventListener('click',()=>{
+    if(visibleSets>=MAX_SETS)return;
+    visibleSets++;
+    const row=document.getElementById('setRow'+visibleSets);
+    row.classList.remove('set-hidden');
+    // carry the RPE-vs-reps labelling onto the newly shown inputs
+    toggleWeightInputs();
+    updateAddSetBtn();
+    document.getElementById('reps'+visibleSets).focus();
   });
 })();
 function clearSetRows(){
-  for(let i=1;i<=5;i++){
+  for(let i=1;i<=MAX_SETS;i++){
     document.getElementById('reps'+i).value='';
     document.getElementById('wt'+i).value='';
     document.getElementById('rpe'+i).value='';
-    document.getElementById('setRow'+i).classList.remove('set-hidden');
+    const row=document.getElementById('setRow'+i);
+    if(i<=BASE_SETS)row.classList.remove('set-hidden');
+    else row.classList.add('set-hidden');
   }
+  visibleSets=BASE_SETS;
+  updateAddSetBtn();
 }
 // --- Edit mode: load a saved exercise back into the form ---
 let editingId=null;
@@ -692,7 +733,8 @@ function loadExerciseForEdit(id){
   toggleWeightInputs();
   clearSetRows();
   const sets=normalizeSets(ex);
-  for(let i=1;i<=5;i++){
+  revealSets(sets.length);
+  for(let i=1;i<=MAX_SETS;i++){
     const s=sets[i-1];
     if(!s)continue;
     document.getElementById('reps'+i).value=s.reps||'';
@@ -704,6 +746,14 @@ function loadExerciseForEdit(id){
   updateLastTime();
   document.getElementById('logExercisePanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
+// Reveal enough set rows to hold n sets (used when loading last session / editing)
+function revealSets(n){
+  visibleSets=Math.max(BASE_SETS,Math.min(MAX_SETS,n));
+  for(let i=1;i<=MAX_SETS;i++){
+    document.getElementById('setRow'+i).classList.toggle('set-hidden',i>visibleSets);
+  }
+  updateAddSetBtn();
+}
 function prefillFromLast(name){
   clearSetRows();
   if(name==='Custom exercise…')return;
@@ -711,7 +761,8 @@ function prefillFromLast(name){
   if(!prior)return;
   const sets=normalizeSets(prior);
   const bw=isBW(name);
-  for(let i=1;i<=5;i++){
+  revealSets(sets.length);
+  for(let i=1;i<=MAX_SETS;i++){
     const s=sets[i-1];
     if(!s)continue;
     if(!bw&&s.weight){document.getElementById('wt'+i).value=s.weight;}
@@ -858,6 +909,15 @@ async function save(){
 }
 
 function daysAgoISO(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+// "Today" / "Yesterday" / "N days ago" for a YYYY-MM-DD date, by whole calendar days.
+function relativeDay(iso){
+  const today=new Date(todayISO()+'T00:00:00');
+  const that=new Date(iso+'T00:00:00');
+  const n=Math.round((today-that)/86400000);
+  if(n<=0)return 'Today';
+  if(n===1)return 'Yesterday';
+  return n+' days ago';
+}
 function monthsAgoISO(n){const d=new Date();d.setMonth(d.getMonth()-n);return d.toISOString().slice(0,10);}
 function inWindow(date,fromDaysAgo,toDaysAgo){
   return date<=daysAgoISO(fromDaysAgo)&&date>=daysAgoISO(toDaysAgo);
@@ -898,8 +958,9 @@ function strengthAxis(cat){
   const scoreOutOf100=baseline?Math.round(Math.min(thisWeek/baseline,1.15)*100):(thisWeek>0?100:0);
   return{thisWeek,baseline,scoreOutOf100};
 }
-function muscleVolumes(){
-  const win=new Set();for(let i=0;i<7;i++)win.add(daysAgoISO(i));
+// Muscle tonnage over the days [fromDaysAgo .. toDaysAgo] inclusive (0 = today).
+function muscleVolumesBetween(fromDaysAgo,toDaysAgo){
+  const win=new Set();for(let i=fromDaysAgo;i<=toDaysAgo;i++)win.add(daysAgoISO(i));
   const totals={};MUSCLES.forEach(m=>totals[m]=0);
   state.exercises.forEach(ex=>{
     if(!win.has(ex.date))return;
@@ -911,6 +972,13 @@ function muscleVolumes(){
     });
   });
   return totals;
+}
+function muscleVolumes(){return muscleVolumesBetween(0,6);}
+// Average weekly tonnage over the 4 weeks BEFORE this one (days 7..34), per muscle.
+function muscleVolumesPrev4wkAvg(){
+  const t=muscleVolumesBetween(7,34);
+  const out={};MUSCLES.forEach(m=>out[m]=t[m]/4);
+  return out;
 }
 function musclePct(m,v){
   const ceiling=MUSCLE_RANGE[m][1];
@@ -1026,8 +1094,45 @@ function bestSetEver(name){
   });
   return best;
 }
+// Best e1RM across the most recent N sessions — so a single light/deload week
+// doesn't look like regression against an all-time high.
+function bestE1RMRecent(name,n=3){
+  const sessions=state.exercises.filter(e=>e.name===name)
+    .sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,n);
+  let best=null;
+  sessions.forEach(ex=>{
+    normalizeSets(ex).forEach(s=>{
+      const load=setLoad(ex,s);
+      const v=e1rm(load,s.reps);
+      if(v>0&&(!best||v>best.e))best={e:v,reps:s.reps,weight:s.weight,load,date:ex.date};
+    });
+  });
+  return best;
+}
 function latestSession(name){
   return state.exercises.filter(e=>e.name===name).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id)[0]||null;
+}
+// What exercise did you log immediately AFTER `name` the last time something
+// actually followed it? Walks back through dates (newest first) and returns the
+// exercise that came after `name` in the most recent session where one did.
+// Today's in-progress session (where `name` may be the last thing so far) is
+// skipped automatically, because nothing follows it yet there.
+function nextExerciseLastTime(name){
+  const dates=[...new Set(state.exercises.filter(e=>e.name===name).map(e=>e.date))].sort().reverse();
+  for(const date of dates){
+    const day=state.exercises.filter(e=>e.date===date).sort((a,b)=>a.id-b.id);
+    // find the LAST occurrence of `name` that day, then the next different lift
+    let found=null;
+    for(let i=0;i<day.length;i++){
+      if(day[i].name===name){
+        for(let j=i+1;j<day.length;j++){
+          if(day[j].name!==name){found=day[j].name;break;}
+        }
+      }
+    }
+    if(found)return found;
+  }
+  return null;
 }
 function latestE1RM(name){
   const sess=latestSession(name);
@@ -1080,13 +1185,22 @@ function renderPercentiles(){
 }
 let trendMonths=3;
 function e1rmSeries(name,sinceISO){
+  // Best raw e1RM per session date, across ALL history (not just the window),
+  // so the rolling-3 at the window's start still sees the sessions before it.
   const byDate={};
-  state.exercises.filter(e=>e.name===name&&e.date>=sinceISO).forEach(ex=>{
+  state.exercises.filter(e=>e.name===name).forEach(ex=>{
     let best=0;
     normalizeSets(ex).forEach(s=>{const v=e1rm(setLoad(ex,s),s.reps);if(v>best)best=v;});
     if(best>0&&(!byDate[ex.date]||best>byDate[ex.date]))byDate[ex.date]=best;
   });
-  return Object.keys(byDate).sort().map(d=>({t:new Date(d).getTime(),date:d,e:byDate[d]}));
+  const dates=Object.keys(byDate).sort();
+  // Rolling max over the 3 most recent sessions: a single deload week doesn't
+  // dip the trend; it only steps down once a high value ages out of the window.
+  const pts=dates.map((d,i)=>{
+    const win=dates.slice(Math.max(0,i-2),i+1);
+    return {t:new Date(d).getTime(),date:d,e:Math.max(...win.map(x=>byDate[x])),raw:byDate[d]};
+  });
+  return pts.filter(p=>p.date>=sinceISO);
 }
 function bodyweightSeries(sinceISO){
   return (state.bodyweightLog||[]).filter(b=>b.date>=sinceISO)
@@ -1117,7 +1231,11 @@ function renderE1rmTrend(){
     minE=Math.min(...bwPts.map(p=>p.kg));maxE=Math.max(...bwPts.map(p=>p.kg));
   }
   if(minE===maxE){minE-=5;maxE+=5;}
-  const epad=(maxE-minE)*0.12;minE=Math.max(0,minE-epad);maxE=maxE+epad;
+  // Tight auto-zoom: hug the data (do NOT floor at zero) so small week-to-week
+  // changes are visible rather than squashed against a 0-based axis.
+  const espan=maxE-minE;
+  const epad=Math.max(espan*0.10,2);
+  minE=minE-epad;maxE=maxE+epad;
   const yOf=e=>padT+plotH-((e-minE)/(maxE-minE))*plotH;
 
   let minBW=0,maxBW=0,yBW=null;
@@ -1202,13 +1320,23 @@ function render(){
     axRow('var(--gold)','Push',push)+axRow('var(--slate-blue)','Legs',legs)+axRow('#d98c5f','Pull',pull);
 
   const vol=muscleVolumes();
+  const prevAvg=muscleVolumesPrev4wkAvg();
   renderMannequin(vol);
-  document.getElementById('muscleList').innerHTML=MUSCLES.map(m=>{
+  const ordered=MUSCLES.slice().sort((a,b)=>musclePct(b,vol[b])-musclePct(a,vol[a]));
+  document.getElementById('muscleList').innerHTML=ordered.map(m=>{
     const v=vol[m];
     const pct=musclePct(m,v);
-    // use the ramp colour, but keep low bands legible as text by lifting the faintest ones
     const c=pct>100?'rgb(214,48,48)':(pct>=GREEN_AT*100?'rgb(60,170,95)':RAMP[Math.max(Math.min(Math.floor(pct/5),9),2)].replace(/rgba\(([^,]+),([^,]+),([^,]+),[^)]+\)/,'rgb($1,$2,$3)'));
-    return `<div class="muscle-row"><span class="mname">${MUSCLE_LABEL[m]}</span><span class="mstatus" style="color:${c}">${Math.round(pct)}%</span></div>`;
+    const base=prevAvg[m];
+    let trend,tcol;
+    if(base<1){
+      trend=v>1?'new':'—';tcol='var(--muted)';
+    } else {
+      const d=Math.round((v/base-1)*100);
+      trend=(d>=0?'+':'−')+Math.abs(d)+'%';
+      tcol = d>15?'rgb(60,170,95)' : d<-15?'rgb(214,120,60)' : 'var(--muted)';
+    }
+    return `<div class="muscle-row"><span class="mname">${MUSCLE_LABEL[m]}</span><span class="mtrend" style="color:${tcol}">${trend}</span><span class="mstatus" style="color:${c}">${Math.round(pct)}%</span></div>`;
   }).join('');
 
   renderE1RM();renderPercentiles();renderE1rmTrend();
@@ -1229,7 +1357,7 @@ function render(){
         return `<div class="day-ex"><span class="dx-name">${escapeHtml(ex.name)}${dbBadgeFor(ex.name)}${isUni(ex.name)?UNI_TAG:''}</span><span class="dx-sets">${sets}</span><button class="edit-btn" data-editid="${ex.id}" title="edit">✎</button><button class="del-btn" data-exid="${ex.id}" title="delete">×</button></div>`;
       }).join('');
       return `<div class="day-card">
-        <div class="day-head"><div class="dh-left"><span class="dh-date">${date}</span>${day?`<span class="day-tag ${day}">${dayLabel}</span>`:''}</div></div>
+        <div class="day-head"><div class="dh-left"><span class="dh-date">${relativeDay(date)}</span><span class="dh-sub">${date}</span>${day?`<span class="day-tag ${day}">${dayLabel}</span>`:''}</div></div>
         ${rows}</div>`;
     }).join('');
     exList.querySelectorAll('.del-btn').forEach(btn=>{
@@ -1254,7 +1382,7 @@ function updateLastTime(){
   const name=document.getElementById('exSelect').value;
   const box=document.getElementById('lastTime');
   if(name==='Custom exercise…'){box.classList.remove('show');return;}
-  const prior=latestSession(name);const best=bestSetEver(name);
+  const prior=latestSession(name);const best=bestE1RMRecent(name,3);
   const bw=isBW(name);
   let html='';
   if(prior){
@@ -1265,7 +1393,7 @@ function updateLastTime(){
     const bestLabel=isBWAdd(name)
       ? (best.weight?`BW+${best.weight}kg × ${best.reps}`:`BW × ${best.reps}`)
       : `${best.weight}kg × ${best.reps}`;
-    html+=`<br><span class="best">All-time best set: ${bestLabel} (${best.date}) → e1RM ${best.e.toFixed(1)}kg</span>`;
+    html+=`<br><span class="best">Best e1RM (last 3): ${best.e.toFixed(1)}kg — from ${bestLabel} (${best.date})</span>`;
   }
   box.innerHTML=html;box.classList.add('show');
 }
@@ -1291,23 +1419,33 @@ document.getElementById('exSelect').addEventListener('change',()=>{
 });
 document.getElementById('cancelEditBtn').addEventListener('click',cancelEdit);
 
-// Populate the muscle dropdown once, then drive the modal via a promise
+// Build the per-muscle % grid once, with a live-updating total readout.
 (function initCustomModal(){
-  const sel=document.getElementById('cxMuscle');
-  MUSCLES.forEach(m=>{
-    const o=document.createElement('option');o.value=m;o.textContent=MUSCLE_LABEL[m];
-    sel.appendChild(o);
-  });
+  const grid=document.getElementById('cxMuscleGrid');
+  grid.innerHTML=MUSCLES.map(m=>
+    `<div class="cx-mrow"><label for="cxm_${m}">${MUSCLE_LABEL[m]}</label>`+
+    `<input type="number" min="0" max="100" step="1" id="cxm_${m}" data-m="${m}" placeholder="0"></div>`
+  ).join('');
+  grid.addEventListener('input',updateCxTotal);
 })();
+function cxSplitTotal(){
+  let t=0;MUSCLES.forEach(m=>{t+=Number(document.getElementById('cxm_'+m).value)||0;});
+  return t;
+}
+function updateCxTotal(){
+  const t=cxSplitTotal();const el=document.getElementById('cxTotal');
+  el.textContent=t+'%';
+  el.className='cx-total '+(t===100?'ok':'bad');
+}
 function askCustomExercise(){
   return new Promise(resolve=>{
     const back=document.getElementById('customModal');
     const nameEl=document.getElementById('cxName');
     const catEl=document.getElementById('cxCat');
-    const musEl=document.getElementById('cxMuscle');
     nameEl.value='';
     catEl.value=document.getElementById('daySelect').value==='other'?'legs':document.getElementById('daySelect').value;
-    musEl.value='quads';
+    MUSCLES.forEach(m=>{document.getElementById('cxm_'+m).value='';});
+    updateCxTotal();
     back.classList.add('show');
     nameEl.focus();
     const done=(result)=>{
@@ -1320,7 +1458,11 @@ function askCustomExercise(){
     const onSave=()=>{
       const n=nameEl.value.trim();
       if(!n){alert('Give the exercise a name.');return;}
-      done({name:n,cat:catEl.value,muscle:musEl.value});
+      const total=cxSplitTotal();
+      if(total!==100){alert('Muscle split must total 100% (currently '+total+'%).');return;}
+      const map={};
+      MUSCLES.forEach(m=>{const v=Number(document.getElementById('cxm_'+m).value)||0;if(v>0)map[m]=v/100;});
+      done({name:n,cat:catEl.value,map});
     };
     const onCancel=()=>done(null);
     const onBackdrop=(e)=>{if(e.target===back)done(null);};
@@ -1339,7 +1481,7 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
   let cat=LIBRARY[name]?LIBRARY[name].cat:null;
   const bw=isBW(name);
   const setsArr=[];
-  for(let i=1;i<=5;i++){
+  for(let i=1;i<=MAX_SETS;i++){
     const reps=Number(document.getElementById('reps'+i).value);
     const wt=bw?0:Number(document.getElementById('wt'+i).value);
     const rpeRaw=document.getElementById('rpe'+i).value;
@@ -1351,7 +1493,7 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
     if(setsArr.length===0){alert('Enter at least one set (reps required).');return;}
     const cx=await askCustomExercise();
     if(!cx)return;
-    name=cx.name;cat=cx.cat;map={[cx.muscle]:1.0};
+    name=cx.name;cat=cx.cat;map=cx.map;
     if(!LIBRARY[name]){
       state.customExercises=state.customExercises||[];
       if(!state.customExercises.some(c=>c.name===name)){
@@ -1361,6 +1503,7 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
     }
   }
   if(setsArr.length===0){alert('Enter at least one set (reps required).');return;}
+  const wasEditing=editingId!==null;
   if(editingId!==null){
     const idx=state.exercises.findIndex(e=>e.id===editingId);
     if(idx>=0)state.exercises[idx]={...state.exercises[idx],name,date,day,setsArr,note,map,cat};
@@ -1374,7 +1517,18 @@ document.getElementById('addExBtn').addEventListener('click',async()=>{
   if(newCustom){registerCustomExercises();populateExSelect();
     document.getElementById('exSelect').value=name;}
   const pbs=updatePBsFromLogs();
-  await save();render();updateLastTime();
+  // Jump to whatever you did after this exercise last session (if anything).
+  const nextName=wasEditing?null:nextExerciseLastTime(name);
+  await save();render();
+  if(nextName){
+    const sel=document.getElementById('exSelect');
+    if(![...sel.options].some(o=>o.value===nextName)){showAllExercises=true;populateExSelect();}
+    if([...sel.options].some(o=>o.value===nextName)){
+      sel.value=nextName;state.lastExercise=nextName;
+      toggleWeightInputs();prefillFromLast(nextName);
+    }
+  }
+  updateLastTime();
   if(pbs.length){
     document.getElementById('statusLine').textContent='New PB! '+pbs.map(x=>x.name+' '+x.kg+'kg').join(', ');
   }
